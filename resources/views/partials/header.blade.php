@@ -1,35 +1,64 @@
 <header>
-    <!--header bar-->
-    <div class="header-bar d-flex align-items-center">
-        <div class="logo">
-            <img src="images/logo.png" alt="Organic Farm">
-        </div>
-        <div class="header-buttons d-flex align-items-center ms-auto">
-            <a href="#" class="search-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20">
-                    <circle cx="9" cy="9" r="7" stroke="black" stroke-width="2" fill="none"></circle>
-                    <line x1="13" y1="13" x2="19" y2="19" stroke="black" stroke-width="2"></line>
-                </svg>
-            </a>
-            <a href="#" class="cart-icon ms-3">
-                <svg width="20" height="20" viewBox="0 0 20 20">
-                    <circle cx="9" cy="17" r="1" fill="black"></circle>
-                    <circle cx="15" cy="17" r="1" fill="black"></circle>
-                    <path d="M1 1h2l3 12h10l3-8H6" stroke="black" stroke-width="2" fill="none"></path>
-                </svg>
-            </a>
-        </div>
-    </div>
+  <div class="container-fluid">
+    <div class="row py-3 align-items-center">
 
-    <!--navigation menu-->
-    <nav class="main-menu d-flex justify-content-center">
-        <ul class="menu-list d-flex gap-4">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Shop</a></li>
-            <li><a href="#">Fruits</a></li>
-            <li><a href="#">Vegetables</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">About</a></li>
+      <div class="col-lg-2 col-md-3 text-center text-md-start">
+        <a href="{{ route('home') }}">
+          <img src="{{ asset('user/images/logom.png') }}" alt="Manfaatin Logo" style="width: 90px; height: auto;">
+        </a>
+      </div>
+
+      <div class="col-lg-5 col-md-6 my-3 my-md-0">
+        <div class="search-bar row bg-light p-2 rounded-4">
+          <div class="col-md-4 d-none d-md-block">
+            <select class="form-select border-0 bg-transparent">
+              <option>All Categories</option>
+              <option>Fertilizer</option>
+              <option>Charcoal</option>
+              <option>Compost</option>
+            </select>
+          </div>
+          <div class="col-10 col-md-7">
+            <input type="text" class="form-control border-0 bg-transparent" placeholder="Search products...">
+          </div>
+          <div class="col-2 col-md-1 text-end">
+            <button class="btn btn-link p-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-3">
+        <ul class="navbar-nav list-unstyled d-flex flex-row gap-3 justify-content-center fw-bold text-uppercase mb-0">
+          <li class="nav-item">
+            <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">Shop</a>
+          </li>
         </ul>
-    </nav>
+      </div>
+
+      <div class="col-lg-3 d-flex gap-3 justify-content-center justify-content-lg-end">
+        <a href="#" class="btn btn-link p-2">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path>
+          </svg>
+        </a>
+        <a href="/cart" class="btn btn-link p-2 position-relative">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
 </header>

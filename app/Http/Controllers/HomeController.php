@@ -2,15 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $featuredProducts = Product::where('is_featured', true)->take(8)->get();
-        
-        return view('pages.home', compact('featuredProducts'));
+        // Ambil semua kategori dari tabel categories
+        $categories = Category::all();
+
+        // Ambil 8 produk terbaru dari tabel products
+        $bestProducts = Product::latest()->take(8)->get();
+
+        // Kirim ke view
+        return view('user.home', compact('categories', 'bestProducts'));
+    }
+
+    public function shop()
+    {
+        // Ambil semua produk untuk halaman shop
+        $products = Product::latest()->paginate(12);
+
+        // Kirim ke view shop
+        return view('user.shop', compact('products'));
     }
 }

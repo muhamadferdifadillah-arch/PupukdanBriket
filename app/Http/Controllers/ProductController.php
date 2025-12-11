@@ -2,85 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::latest()->get();
+        $products = Product::with('category')->latest()->paginate(12);
         return view('products.index', compact('products'));
     }
-
-    public function create()
+    
+    public function show($id)
     {
-        return view('products.create');
+        $product = Product::with('category')->findOrFail($id);
+        $relatedProducts = Product::where('category_id', $product->category_id)
+                                  ->where('id', '!=', $id)
+                                  ->limit(4)
+                                  ->get();
+        return view('products.show', compact('product', 'relatedProducts'));
     }
-
-    public function store(Request $request)
+    
+    public function search(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-
-        $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
-            $data['image'] = $imagePath;
-        }
-
-        Product::create($data);
-
-        return redirect()->route('products.index')->with('success', 'Product created successfully');
-    }
-
-    public function edit(Product $product)
-    {
-        return view('products.edit', compact('product'));
-    }
-
-    public function update(Request $request, Product $product)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-
-        $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            // Hapus foto lama jika ada
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-            $imagePath = $request->file('image')->store('products', 'public');
-            $data['image'] = $imagePath;
-        }
-
-        $product->update($data);
-
-        return redirect()->route('products.index')->with('success', 'Product updated successfully');
-    }
-
-    public function destroy(Product $product)
-    {
-        // Hapus foto jika ada
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
-        }
-
-        $product->delete();
-
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully');
+        $query = $request->input('query');
+        $products = Product::where('name', 'LIKE', "%{$query}%")
+                           ->orWhere('description', 'LIKE', "%{$query}%")
+                           ->paginate(12);
+        return view('products.index', compact('products', 'query'));
     }
 }

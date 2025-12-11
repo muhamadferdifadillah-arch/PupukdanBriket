@@ -1,0 +1,69 @@
+:root {
+  --primary-color: #00a651;
+  --secondary-color: #f8b500;
+  --dark-color: #333;
+  --light-color: #f5f5f5;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--dark-color);
+  background-color: #f8f9fa;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Nunito', sans-serif;
+}
+
+/* Header Improvements */
+header {
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: white;
+}
+
+.search-bar {
+  border: 1px solid #ddd;
+}
+
+.search-bar select,
+.search-bar input {
+  font-size: 14px;
+}
+
+.nav-link.active {
+  color: var(--primary-color) !important;
+  font-weight: 700;
+}
+
+/* Footer */
+footer {
+  background: var(--dark-color);
+  color: white;
+}
+
+footer a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: white;
+}
+
+#footer-bottom {
+  background: #222;
+  color: rgba(255,255,255,0.7);
+  padding: 20px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-content h2 {
+    font-size: 2rem;
+  }
+
+  .banner-blocks {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,4 +1,4 @@
-<title>{{ config('app.name', 'Manfaatin') }} - @yield('title', 'Organic Fertilizer')</title>
+<title>@yield('title', 'Manfaatin - Organic Fertilizer')</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -1,134 +1,58 @@
 <footer class="py-5">
-    <div class="container-lg">
-        <div class="row">
-
-            <!-- Logo & Social Media -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="footer-menu">
-                    <img src="{{ asset('user/images/logo.svg') }}" width="240" height="70" alt="Manfaatin Logo">
-                    <div class="social-links mt-3">
-                        <ul class="d-flex list-unstyled gap-2">
-                            <li>
-                                <a href="{{ config('social.facebook') }}" class="btn btn-outline-light" target="_blank">
-                                    <svg width="16" height="16"><use xlink:href="#facebook"></use></svg>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ config('social.twitter') }}" class="btn btn-outline-light" target="_blank">
-                                    <svg width="16" height="16"><use xlink:href="#twitter"></use></svg>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ config('social.youtube') }}" class="btn btn-outline-light" target="_blank">
-                                    <svg width="16" height="16"><use xlink:href="#youtube"></use></svg>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ config('social.instagram') }}" class="btn btn-outline-light" target="_blank">
-                                    <svg width="16" height="16"><use xlink:href="#instagram"></use></svg>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Company Links -->
-            <div class="col-md-2 col-sm-6">
-                <div class="footer-menu">
-                    <h5 class="widget-title">Company</h5>
-                    <ul class="menu-list list-unstyled">
-                        <li class="menu-item">
-                            <a href="{{ route('user.about') }}" class="nav-link">About us</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.terms') }}" class="nav-link">Terms & Conditions</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.blog') }}" class="nav-link">Our Blog</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.careers') }}" class="nav-link">Careers</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Quick Links -->
-            <div class="col-md-2 col-sm-6">
-                <div class="footer-menu">
-                    <h5 class="widget-title">Quick Links</h5>
-                    <ul class="menu-list list-unstyled">
-                        <li class="menu-item">
-                            <a href="{{ route('user.offers') }}" class="nav-link">Offers</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.coupons') }}" class="nav-link">Discount Coupons</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.stores') }}" class="nav-link">Stores</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.track-order') }}" class="nav-link">Track Order</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.shop') }}" class="nav-link">Shop</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Customer Service -->
-            <div class="col-md-2 col-sm-6">
-                <div class="footer-menu">
-                    <h5 class="widget-title">Customer Service</h5>
-                    <ul class="menu-list list-unstyled">
-                        <li class="menu-item">
-                            <a href="{{ route('user.faq') }}" class="nav-link">FAQ</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.contact') }}" class="nav-link">Contact</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.privacy') }}" class="nav-link">Privacy Policy</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.returns') }}" class="nav-link">Returns & Refunds</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{ route('user.delivery') }}" class="nav-link">Delivery Information</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Newsletter -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="footer-menu">
-                    <h5 class="widget-title">Subscribe Us</h5>
-                    <p>Subscribe to our newsletter to get updates about our grand offers.</p>
-                    <form class="d-flex mt-3 gap-0" action="{{ route('user.newsletter.subscribe') }}" method="POST" id="newsletterForm">
-                        @csrf
-                        <input class="form-control rounded-start rounded-0 bg-light" type="email" name="email" placeholder="Email Address" aria-label="Email Address" required>
-                        <button class="btn btn-dark rounded-end rounded-0" type="submit">Subscribe</button>
-                    </form>
-                </div>
-            </div>
-          
+  <div class="container-lg">
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <img src="{{ asset('user/images/logom.png') }}" width="150" alt="Logo" class="mb-3">
+        <p class="text-white-50">Sustainable solutions for a greener future</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="btn btn-outline-light btn-sm">
+            <svg width="16" height="16" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+          <a href="#" class="btn btn-outline-light btn-sm">
+            <svg width="16" height="16" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+          </a>
+          <a href="#" class="btn btn-outline-light btn-sm">
+            <svg width="16" height="16" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
         </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <h5 class="text-white mb-3">Quick Links</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#">About Us</a></li>
+          <li class="mb-2"><a href="#">Shop</a></li>
+          <li class="mb-2"><a href="#">Contact</a></li>
+          <li class="mb-2"><a href="#">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <h5 class="text-white mb-3">Customer Service</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#">FAQ</a></li>
+          <li class="mb-2"><a href="#">Shipping</a></li>
+          <li class="mb-2"><a href="#">Returns</a></li>
+          <li class="mb-2"><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <h5 class="text-white mb-3">Newsletter</h5>
+        <p class="text-white-50">Subscribe to get updates</p>
+        <form class="d-flex">
+          <input type="email" class="form-control" placeholder="Your email">
+          <button class="btn btn-primary ms-2">Subscribe</button>
+        </form>
+      </div>
     </div>
+  </div>
 </footer>
 
-<!-- Footer Bottom -->
 <div id="footer-bottom">
-    <div class="container-lg">
-        <div class="row">
-            <div class="col-md-6 copyright">
-                <p>© {{ date('Y') }} Manfaatin. All rights reserved.</p>
-            </div>
-            <div class="col-md-6 credit-link text-start text-md-end">
-                <p>Developed with ❤️ by <a href="https://manfaatin.com/">Manfaatin Team</a></p>
-            </div>
-        </div>
+  <div class="container-lg">
+    <div class="text-center">
+      <p class="mb-0">© 2024 ManfaatinOnline. All rights reserved.</p>
     </div>
+  </div>
 </div>
