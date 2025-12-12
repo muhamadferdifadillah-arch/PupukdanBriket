@@ -854,7 +854,7 @@ function removeItem(id) {
 }
 
 function checkout() {
-  window.location.href = '{{ route("checkout") ?? "/checkout" }}';
+  window.location.href = '{{ route("checkout") }}';
 }
 
 function showToast(message, type = 'info') {

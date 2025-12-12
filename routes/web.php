@@ -46,9 +46,11 @@ Route::get('/categories', [UserCategoryController::class, 'index'])->name('categ
 // ============================================
 // USER PROFILE (LOGIN REQUIRED)
 // ============================================
-
+use App\Http\Controllers\user\CheckoutController;
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('user.checkout.process');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
@@ -273,11 +275,4 @@ Route::middleware(['auth'])->prefix('produsen')->group(function () {
 
 Route::get('/about', function () {
     return view('user.pages.about');
-});
-
-use App\Http\Controllers\user\CheckoutController;
-
-Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
-    Route::post('/checkout/process', [CheckoutController::class, 'process'])
-        ->name('checkout.process');
 });
