@@ -1,181 +1,163 @@
-@extends('user.layouts.app')
+@extends('layouts.app')
 
 @section('title', 'All Categories')
 
+@push('styles')
+    <style>
+        /* Category Card Styles */
+        .categories-page-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            border: none;
+        }
+
+        .categories-page-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .categories-page-card .card-body {
+            min-height: 240px;
+            padding: 2rem;
+        }
+
+        /* Icon Circle Border - sama seperti homepage */
+        .categories-icon-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            transition: all 0.3s ease;
+            margin: 0 auto 1rem;
+        }
+
+        .categories-page-card:hover .categories-icon-circle {
+            border-color: #28a745 !important;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+        }
+
+        .categories-icon-circle img {
+            width: 60px !important;
+            height: 60px !important;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .categories-page-card:hover .categories-icon-circle img {
+            transform: scale(1.1);
+        }
+
+        /* Category Title */
+        .categories-title {
+            font-size: 1.1rem;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .categories-page-card:hover .categories-title {
+            color: #28a745 !important;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .categories-page-card .card-body {
+                min-height: 200px;
+                padding: 1.5rem;
+            }
+
+            .categories-title {
+                font-size: 1rem;
+            }
+
+            .categories-icon-circle {
+                width: 100px;
+                height: 100px;
+            }
+
+            .categories-icon-circle img {
+                width: 50px !important;
+                height: 50px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .categories-page-card .card-body {
+                min-height: 180px;
+                padding: 1.25rem;
+            }
+
+            .categories-title {
+                font-size: 0.95rem;
+            }
+
+            .categories-icon-circle {
+                width: 90px;
+                height: 90px;
+            }
+
+            .categories-icon-circle img {
+                width: 45px !important;
+                height: 45px !important;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
-<style>
-    .product-card {
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 20px;
-        background: #fff;
-        transition: all 0.3s ease;
-    }
+    <div class="container py-5">
 
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    }
+        <!-- Header Section -->
+        <div class="text-center mb-5">
+            <h2 class="fw-bold mb-2">All Categories</h2>
+            <p class="text-muted">Browse our product categories</p>
+        </div>
 
-    .product-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 15px;
-    }
+        @if($categories->count() > 0)
+            <div class="row g-4 justify-content-center">
+                @foreach($categories as $cat)
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <a href="{{ route('category.show', $cat->slug) }}" class="text-decoration-none">
+                            <div class="categories-page-card card shadow-sm h-100">
+                                <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
 
-    .product-name {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        color: #333;
-    }
-
-    .product-price {
-        font-size: 18px;
-        font-weight: 700;
-        color: #00a651;
-        margin-bottom: 15px;
-    }
-
-    .btn-add-to-cart {
-        width: 100%;
-        padding: 10px;
-        background: #00a651;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .btn-add-to-cart:hover {
-        background: #008a43;
-        transform: scale(1.02);
-    }
-
-    .btn-add-to-cart:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-    }
-</style>
-
-<div class="container py-5">
-    <h2 class="mb-4">All Products</h2>
+                                    <!-- Icon Container with Circle Border -->
+                                    <div class="categories-icon-circle">
+                                        <img src="{{ asset($cat->icon_image) }}" alt="{{ $cat->name }}">
+                                    </div>
 
 
-    @if(isset($products) && $products->count() > 0)
+                                    <!-- Category Name -->
+                                    <h5 class="categories-title mb-0">{{ $cat->name }}</h5>
 
-        <div class="row g-4">
-           @foreach($products ?? [] as $product)
+                                    <!-- Optional: Product Count -->
+                                    @if(isset($cat->products_count))
+                                        <small class="text-muted mt-2">
+                                            {{ $cat->products_count }} {{ $cat->products_count == 1 ? 'product' : 'products' }}
+                                        </small>
+                                    @endif
 
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="product-card">
-                        
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                        
-                        <div class="product-name">{{ $product->name }}</div>
-                        
-                        <div class="product-price">
-                            Rp {{ number_format($product->price, 0, ',', '.') }}
-                        </div>
-                        
-                        <!-- Tombol Add to Cart -->
-                        <button 
-                            class="btn-add-to-cart" 
-                            data-product-id="{{ $product->id }}"
-                            type="button">
-                            Add to Cart
-                        </button>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-            @endforeach
-        </div>
-    @else
-        <div class="alert alert-info">
-            Belum ada produk dalam kategori ini.
-        </div>
-    @endif
-</div>
+                @endforeach
+            </div>
+        @else
+            <div class="alert alert-info border-0 shadow-sm text-center py-4">
+                <i class="bi bi-info-circle fs-4 mb-2 d-block"></i>
+                <p class="mb-0">Belum ada kategori yang tersedia.</p>
+            </div>
+        @endif
 
-<!-- AJAX Script untuk Add to Cart -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    
-    const buttons = document.querySelectorAll('.btn-add-to-cart');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const productId = this.getAttribute('data-product-id');
-            const btnText = this.textContent;
-            
-            // Disable button saat proses
-            this.disabled = true;
-            this.textContent = 'Adding...';
-            
-            // Ambil CSRF token
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
-            // Kirim request AJAX
-            fetch('/cart/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify({
-                    product_id: productId,
-                    quantity: 1
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Enable button kembali
-                this.disabled = false;
-                this.textContent = btnText;
-                
-                if (data.success) {
-                    // Tampilkan notifikasi sukses
-                    showNotification('success', data.message);
-                    
-                    // Update cart count di navbar
-                    updateCartCount(data.cart_count);
-                } else {
-                    // Tampilkan error
-                    showNotification('error', data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                this.disabled = false;
-                this.textContent = btnText;
-                showNotification('error', 'Terjadi kesalahan saat menambahkan produk');
-            });
-        });
-    });
-    
-    // Fungsi untuk tampilkan notifikasi
-    function showNotification(type, message) {
-        // Gunakan alert sederhana (atau bisa pakai SweetAlert2)
-        if (type === 'success') {
-            alert('✓ ' + message);
-        } else {
-            alert('✗ ' + message);
-        }
-    }
-    
-    // Fungsi untuk update cart count di navbar
-    function updateCartCount(count) {
-        const cartBadge = document.querySelector('.cart-count');
-        if (cartBadge) {
-            cartBadge.textContent = count;
-        }
-    }
-});
-</script>
+    </div>
 @endsection

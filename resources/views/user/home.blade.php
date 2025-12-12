@@ -107,7 +107,7 @@
 
     /* Hero Section */
     .hero-section {
-      background-image: url('user/images/ferdi.png');
+      background-image: url('user/images/logoW.png');
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
@@ -422,11 +422,10 @@
       <div class="row align-items-center">
         <div class="col-lg-6 hero-content">
           <h2>
-            <span class="fw-bold text-primary-green">Organic</span> Fertilizer<br>
-            <span class="fw-bold text-primary-green">Environmentally</span> Friendly
+            <span class="fw-bold text-primary-green">Pemanfaatan</span> limbah sebagai<br>
+            <span class="fw-bold text-primary-green">Peluang bisnis</span> bernilai tambah
           </h2>
-          <p class="fs-5 mb-4">Sustainable solutions for a greener future</p>
-          <a href="#" class="btn btn-primary btn-lg px-5">Shop Now</a>
+          <p class="fs-5 mb-4">Solusi berkelanjutan untuk masa depan yang lebih hijau</p>
         </div>
       </div>
 
@@ -436,8 +435,9 @@
           <div class="card feature-card border-0 bg-primary text-white p-4">
             <div class="row align-items-center">
               <div class="col-3 text-center">
-                <svg width="50" height="50" fill="currentColor">
-                  <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                <svg width="50" height="50" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2C10.7 2 9.5 2.5 8.6 3.4L4 8V14C4 16.2 5.8 18 8 18V20C8 21.1 8.9 22 10 22H14C15.1 22 16 21.1 16 20V18C18.2 18 20 16.2 20 14V8L15.4 3.4C14.5 2.5 13.3 2 12 2M12 4C12.8 4 13.5 4.3 14.1 4.9L18 8.8V14C18 15.1 17.1 16 16 16H14V20H10V16H8C6.9 16 6 15.1 6 14V8.8L9.9 4.9C10.5 4.3 11.2 4 12 4M10 7V14H14V7L12 9L10 7Z" />
                 </svg>
               </div>
               <div class="col-9">
@@ -451,9 +451,9 @@
           <div class="card feature-card border-0 bg-success text-white p-4">
             <div class="row align-items-center">
               <div class="col-3 text-center">
-                <svg width="50" height="50" fill="currentColor">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <path d="M9 11l3 3L22 4" stroke="white" stroke-width="2"></path>
+                <svg width="50" height="50" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z" />
                 </svg>
               </div>
               <div class="col-9">
@@ -467,22 +467,19 @@
           <div class="card feature-card border-0 bg-danger text-white p-4">
             <div class="row align-items-center">
               <div class="col-3 text-center">
-                <svg width="50" height="50" fill="currentColor">
-                  <rect x="1" y="3" width="15" height="13"></rect>
-                  <path d="M16 8a4 4 0 0 1 8 0v8h-8V8z"></path>
-                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                <svg width="50" height="50" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M19.5,9.5L21.46,12H17V9.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8Z" />
                 </svg>
               </div>
               <div class="col-9">
                 <h5 class="text-white mb-1">Free Delivery</h5>
-                <p class="mb-0 small">On orders over $50</p>
+                <p class="mb-0 small">Free shipping to all areas</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
@@ -500,7 +497,7 @@
         <div class="col-md-4 col-6">
           <div class="category-item">
             <a href="{{ route('category.show', 'organic-fertilizer') }}" class="text-decoration-none">
-              <img src="user/images/logo1.png" class="rounded-circle" alt="Fertilizer">
+              <img src="user/images/logoD.png" class="rounded-circle" alt="Fertilizer">
               <h4 class="fs-6 mt-3 fw-semibold text-dark">Organic Fertilizer</h4>
             </a>
           </div>
@@ -509,7 +506,7 @@
         <div class="col-md-4 col-6">
           <div class="category-item">
             <a href="{{ route('category.show', 'charcoal') }}" class="text-decoration-none">
-              <img src="user/images/logo2.png" class="rounded-circle" alt="Charcoal">
+              <img src="user/images/logoA.png" class="rounded-circle" alt="Charcoal">
               <h4 class="fs-6 mt-3 fw-semibold text-dark">Charcoal</h4>
             </a>
           </div>
@@ -518,7 +515,7 @@
         <div class="col-md-4 col-6">
           <div class="category-item">
             <a href="{{ route('category.show', 'charcoal-briquettes') }}" class="text-decoration-none">
-              <img src="user/images/logo3.png" class="rounded-circle" alt="Charcoal Briquettes">
+              <img src="user/images/logos.png" class="rounded-circle" alt="Charcoal Briquettes">
               <h4 class="fs-6 mt-3 fw-semibold text-dark">Charcoal Briquettes</h4>
             </a>
           </div>
@@ -595,24 +592,6 @@
           <img src="user/images/logom.png" width="150" alt="Logo" class="mb-3">
           <p class="text-white-50">Sustainable solutions for a greener future</p>
           <div class="d-flex gap-2 mt-3">
-            <a href="#" class="btn btn-outline-light btn-sm">
-              <svg width="16" height="16" fill="currentColor">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-              </svg>
-            </a>
-            <a href="#" class="btn btn-outline-light btn-sm">
-              <svg width="16" height="16" fill="currentColor">
-                <path
-                  d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
-                </path>
-              </svg>
-            </a>
-            <a href="#" class="btn btn-outline-light btn-sm">
-              <svg width="16" height="16" fill="currentColor">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
             </a>
           </div>
         </div>
@@ -620,10 +599,9 @@
         <div class="col-lg-3 col-md-6">
           <h5 class="text-white mb-3">Quick Links</h5>
           <ul class="list-unstyled">
-            <li class="mb-2"><a href="#">About Us</a></li>
-            <li class="mb-2"><a href="#">Shop</a></li>
-            <li class="mb-2"><a href="#">Contact</a></li>
-            <li class="mb-2"><a href="#">Blog</a></li>
+            <li class="mb-2"><a href="#">Tentang Kami</a></li>
+            <li class="mb-2"><a href="#">Produk & Kategori</a></li>
+            <li class="mb-2"><a href="#">Kontak Kami</a></li>
           </ul>
         </div>
 
@@ -631,9 +609,9 @@
           <h5 class="text-white mb-3">Customer Service</h5>
           <ul class="list-unstyled">
             <li class="mb-2"><a href="#">FAQ</a></li>
-            <li class="mb-2"><a href="#">Shipping</a></li>
-            <li class="mb-2"><a href="#">Returns</a></li>
-            <li class="mb-2"><a href="#">Privacy Policy</a></li>
+            <li class="mb-2"><a href="#">Informasi Pengiriman</a></li>
+            <li class="mb-2"><a href="#">Kebijakan Pengembalian</a></li>
+            <li class="mb-2"><a href="#">Kebijakan Privasi</a></li>
           </ul>
         </div>
 

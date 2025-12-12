@@ -16,9 +16,17 @@
             <div class="col-md-3 mb-4">
                 <div class="card h-100 shadow-sm">
 
-                    <img src="{{ asset('storage/' . $product->image) }}" 
-                         class="card-img-top" 
-                         style="height: 200px; object-fit: cover;">
+                    @if($product->image && file_exists(public_path($product->image)))
+                        <img src="{{ asset($product->image) }}" 
+                             class="card-img-top" 
+                             style="height: 200px; object-fit: cover;"
+                             alt="{{ $product->name }}">
+                    @else
+                        <div class="bg-secondary d-flex align-items-center justify-content-center" 
+                             style="height: 200px;">
+                            <span class="text-white">No Image Available</span>
+                        </div>
+                    @endif
 
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->name }}</h5>
@@ -27,7 +35,6 @@
                             Rp{{ number_format($product->price, 0, ',', '.') }}
                         </p>
 
-                        {{-- FIX: Add to Cart HARUS POST --}}
                         <form action="{{ route('cart.add', $product->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-success w-100">
