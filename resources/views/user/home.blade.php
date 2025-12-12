@@ -11,6 +11,7 @@
   <meta name="author" content="">
   <meta name="keywords" content="">
   <meta name="description" content="">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <link rel="icon" type="image/png" href="user/images/logom.png">
   <link rel="shortcut icon" href="user/images/logom.ico">
@@ -107,7 +108,7 @@
 
     /* Hero Section */
     .hero-section {
-      background-image: url('user/images/logoW.png');
+      background-image: url('user/images/ferdi.png');
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
@@ -536,6 +537,8 @@
         @forelse($bestProducts as $product)
           <div class="col-lg-3 col-md-4 col-sm-6">
             <div class="product-item text-center p-3 shadow-sm rounded-3 bg-white">
+
+              <!-- Produk Image -->
               <figure>
                 <a href="{{ url('/product/' . $product->slug) }}">
                   <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded"
@@ -543,17 +546,19 @@
                 </a>
               </figure>
 
+              <!-- Produk Nama -->
               <h5 class="mt-3">{{ $product->name }}</h5>
 
+              <!-- Harga -->
               <p class="fw-bold text-dark">
                 Rp {{ number_format($product->price, 0, ',', '.') }}
               </p>
 
-              <form action="{{ route('cart.add') }}" method="POST" class="d-inline">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
-              </form>
+              <!-- Tombol Add to Cart -->
+              <button class="btn btn-primary w-100 btn-add-to-cart" data-product-id="{{ $product->id }}">
+                Add to Cart
+              </button>
+
             </div>
           </div>
         @empty
@@ -562,6 +567,153 @@
       </div>
     </div>
   </section>
+
+  <!-- SCRIPT AJAX ADD TO CART -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const buttons = document.querySelectorAll('.btn-add-to-cart');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', function () {
+          let productId = this.dataset.productId;
+          let oldText = this.textContent;
+
+          // Disable button
+          this.disabled = true;
+          this.textContent = "Adding...";
+
+          // Get CSRF token
+          const csrfToken = document.querySelector('meta[name="csrf-token"]');
+          if (!csrfToken) {
+            alert('CSRF token not found!');
+            this.disabled = false;
+            this.textContent = oldText;
+            return;
+          }
+
+          fetch("{{ route('cart.add') }}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": csrfToken.getAttribute('content'),
+              "X-Requested-With": "XMLHttpRequest",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify({
+              product_id: productId,
+              quantity: 1
+            })
+          })
+            .then(response => {
+              // Check if response is ok
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log('Response:', data); // Debug
+
+              this.disabled = false;
+              this.textContent = oldText;
+
+              if (data.success) {
+                // Tampilkan notifikasi sukses
+                showNotification('success', data.message);
+
+                // Update cart count
+                updateCartCount(data.cart_count);
+              } else {
+                showNotification('error', data.message || 'Gagal menambahkan produk');
+              }
+            })
+            .catch(err => {
+              console.error('Error:', err);
+              this.disabled = false;
+              this.textContent = oldText;
+              showNotification('error', 'Terjadi kesalahan. Silakan coba lagi.');
+            });
+        });
+      });
+
+      // Function untuk menampilkan notifikasi
+      function showNotification(type, message) {
+        // Hapus notifikasi lama
+        const oldNotif = document.querySelector('.toast-notification');
+        if (oldNotif) oldNotif.remove();
+
+        // Buat notifikasi baru
+        const notif = document.createElement('div');
+        notif.className = 'toast-notification';
+        notif.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease;
+        min-width: 300px;
+      `;
+
+        if (type === 'success') {
+          notif.style.background = '#28a745';
+          notif.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+            </svg>
+            <span>${message}</span>
+          </div>
+        `;
+        } else {
+          notif.style.background = '#dc3545';
+          notif.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            <span>${message}</span>
+          </div>
+        `;
+        }
+
+        document.body.appendChild(notif);
+
+        // Hapus otomatis setelah 3 detik
+        setTimeout(() => notif.remove(), 3000);
+      }
+
+      // Function untuk update cart count
+      function updateCartCount(count) {
+        const cartElements = document.querySelectorAll('.cart-count, .cart-badge');
+        cartElements.forEach(el => {
+          el.textContent = count;
+          el.style.display = count > 0 ? 'block' : 'none';
+        });
+      }
+
+      // Add CSS animation
+      const style = document.createElement('style');
+      style.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+    `;
+      document.head.appendChild(style);
+    });
+  </script>
+
 
   <!-- App Download -->
   <section class="py-5">

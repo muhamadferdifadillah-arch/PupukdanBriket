@@ -34,10 +34,14 @@ class CheckoutController extends Controller
     public function process(Request $request)
     {
         $request->validate([
-            'customer_name' => 'required',
-            'customer_phone' => 'required',
-            'shipping_address' => 'required',
-            'payment_method' => 'required'
+           'full_name' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+            'province_id' => 'required',
+            'city_id' => 'required',
+            'postal_code' => 'required',
+            'courier' => 'required',
+            'payment_method' => 'required',
         ]);
         
         $userId = Auth::id();

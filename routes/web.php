@@ -275,6 +275,9 @@ Route::get('/about', function () {
     return view('user.pages.about');
 });
 
-Route::get('/checkout', function () {
-    return view('user.checkout');
-})->name('checkout');
+use App\Http\Controllers\user\CheckoutController;
+
+Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])
+        ->name('checkout.process');
+});

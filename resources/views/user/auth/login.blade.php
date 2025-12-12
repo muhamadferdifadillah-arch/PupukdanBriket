@@ -33,7 +33,7 @@
             <div class="mb-10">
                 <!-- Logo -->
                 <div class="mb-8">
-                    <img src="{{ asset('User/images/logom.png') }}" alt="Logo Manfaatin" class="h-12 w-auto">
+                    <img src="{{ asset('user/images/logom.png') }}" alt="Logo Manfaatin" class="h-12 w-auto">
                 </div>
                 
                 <!-- Heading -->
