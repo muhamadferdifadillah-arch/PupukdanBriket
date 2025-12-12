@@ -17,11 +17,12 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\User\CategoryController as UserCategoryController;
+use App\Http\Controllers\user\CategoryController as userCategoryController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Produsen\ProdukProdusenController;
+
 
 
 // ============================================
