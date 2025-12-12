@@ -587,13 +587,13 @@
                 <!-- Member 1 -->
                 <div class="team-member">
                     <div class="team-photo-wrapper">
-                        <img src="user/images/tiara.jpg" alt="Muhamad Ferdi Fadillah" class="team-photo">
+                        <img src="user/images/tiara.jpg" alt="Tiara Nur Hidayah" class="team-photo">
                     </div>
 
                     <div class="team-info">
                         <h3 class="team-name">Tiara Nur Hidayah</h3>
-                        <p class="team-position">CEO & Founder</p>
-                        <p class="team-description">Visioner di balik ManfaatinOnline dengan pengalaman 10+ tahun.</p>
+                        <p class="team-position">UI/UX Designer</p>
+                        <p class="team-description">Ahli membuat tampilan visual aplikasi.</p>
 
                         <div class="team-social">
                             <!-- WhatsApp -->
@@ -621,7 +621,7 @@
                 <!-- Member 2 -->
                 <div class="team-member">
                     <div class="team-photo-wrapper">
-                        <img src="user/images/ferdi.png" alt="Muhamad Ferdi Fadillah" class="team-photo">
+                        <img src="user/images/ferdi12.png" alt="Muhamad Ferdi Fadillah" class="team-photo">
                     </div>
 
                     <div class="team-info">
@@ -655,13 +655,13 @@
                 <!-- Member 3 -->
                 <div class="team-member">
                     <div class="team-photo-wrapper">
-                        <img src="user/images/ghts.jpg" alt="Muhamad Ferdi Fadillah" class="team-photo">
+                        <img src="user/images/ghts.jpg" alt="Ghaitsa Zahira Sofhia" class="team-photo">
                     </div>
 
                     <div class="team-info">
                         <h3 class="team-name">Ghaitsa Zahira Sofhia</h3>
-                        <p class="team-position">Head of Product Development</p>
-                        <p class="team-description">Inovator produk organik dan solusi ramah lingkungan.</p>
+                        <p class="team-position">Content Curator</p>
+                        <p class="team-description">Ahli dalam mengkurasi, meneliti, dan menyusun.</p>
 
                         <div class="team-social">
                             <!-- WhatsApp -->
