@@ -15,7 +15,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\user\CartController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\user\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\user\CategoryController as userCategoryController;
 use App\Http\Controllers\PageController;
@@ -79,10 +79,10 @@ Route::get('/cart/add/{id}', function () {
 // ============================================
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/orders', [App\Http\Controllers\User\OrderController::class, 'index'])->name('user.orders');
-    Route::get('/orders/pay/{id}', [App\Http\Controllers\User\OrderController::class, 'pay'])->name('user.orders.pay');
-    Route::patch('/orders/complete/{id}', [App\Http\Controllers\User\OrderController::class, 'complete'])->name('user.orders.complete');
-    Route::patch('/orders/cancel/{id}', [App\Http\Controllers\User\OrderController::class, 'cancel'])->name('user.orders.cancel');
+    Route::get('/orders', [App\Http\Controllers\user\OrderController::class, 'index'])->name('user.orders');
+    Route::get('/orders/pay/{id}', [App\Http\Controllers\user\OrderController::class, 'pay'])->name('user.orders.pay');
+    Route::patch('/orders/complete/{id}', [App\Http\Controllers\user\OrderController::class, 'complete'])->name('user.orders.complete');
+    Route::patch('/orders/cancel/{id}', [App\Http\Controllers\user\OrderController::class, 'cancel'])->name('user.orders.cancel');
 });
 
 
