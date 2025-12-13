@@ -85,6 +85,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/pay/{id}', [App\Http\Controllers\user\OrderController::class, 'pay'])->name('user.orders.pay');
     Route::patch('/orders/complete/{id}', [App\Http\Controllers\user\OrderController::class, 'complete'])->name('user.orders.complete');
     Route::patch('/orders/cancel/{id}', [App\Http\Controllers\user\OrderController::class, 'cancel'])->name('user.orders.cancel');
+    Route::get('/orders', [\App\Http\Controllers\User\OrderController::class, 'index'])
+        ->name('user.orders.index');
 });
 
 
@@ -276,3 +278,9 @@ Route::middleware(['auth'])->prefix('produsen')->group(function () {
 Route::get('/about', function () {
     return view('user.pages.about');
 });
+
+Route::get('/register', function () {
+    return redirect()->route('user.register');
+});
+
+

@@ -57,19 +57,24 @@
                                     <textarea name="address" class="form-control rounded-3" rows="3" required>{{ old('address', auth()->user()->address ?? '') }}</textarea>
                                 </div>
 
-                                <div class="col-md-6">
+                               <div class="col-md-6">
                                     <label class="form-label">Provinsi</label>
-                                    <select id="province" name="province_id" class="form-select rounded-3" required>
-                                        <option value="">Pilih Provinsi</option>
-                                    </select>
+                                    <input type="text"
+                                        class="form-control rounded-3 bg-light"
+                                        value="Riau"
+                                        readonly>
+                                <input type="hidden" name="province_id" value="riau">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="form-label">Kota/Kabupaten</label>
-                                    <select id="city" name="city_id" class="form-select rounded-3" required>
-                                        <option value="">Pilih Kota</option>
-                                    </select>
+                                    <input type="text"
+                                        class="form-control rounded-3 bg-light"
+                                        value="Kabupaten Bengkalis"
+                                        readonly>
+                                    <input type="hidden" name="city_id" value="bengkalis">
                                 </div>
+
 
                                 <div class="col-md-6">
                                     <label class="form-label">Kecamatan</label>
@@ -99,7 +104,11 @@
 
                             <label class="shipping-option border rounded p-3 mb-3 d-flex justify-content-between align-items-center cursor-pointer">
                                 <div class="d-flex align-items-center gap-3">
-                                    <input type="radio" name="courier" value="{{ $key }}">
+                                   <input type="radio"
+                                        name="courier"
+                                        value="{{ $key }}"
+                                        data-cost="{{ $val[2] }}"
+                                        required>
                                     <div>
                                         <strong>{{ $val[0] }}</strong>
                                         <small class="d-block text-muted">{{ $val[1] }}</small>
@@ -149,28 +158,38 @@
 
                             <hr>
 
-                            <div class="d-flex justify-content-between mb-2">
+                           <div class="d-flex justify-content-between mb-2">
                                 <span>Subtotal</span>
-                                <strong>Rp 125.000</strong>
+                                <strong>Rp {{ number_format($subtotal, 0, ',', '.') }}</strong>
                             </div>
 
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Ongkos Kirim</span>
-                                <strong id="shippingCost">Rp 15.000</strong>
+                                <strong id="shippingCost">
+                                    Rp {{ number_format($shipping, 0, ',', '.') }}
+                                    </strong>
                             </div>
 
                             <hr>
 
                             <div class="d-flex justify-content-between">
                                 <span class="fw-bold fs-5">Total</span>
-                                <span class="fw-bold fs-5 text-success" id="totalAmount">Rp 140.000</span>
-                            </div>
-
-                            <button class="btn btn-success w-100 mt-4 py-3 rounded-3 fw-semibold">
-                                <i class="fas fa-lock me-2"></i>Proses Pembayaran
-                            </button>
+                                <span class="fw-bold fs-5 text-success" id="totalAmount">
+                                     Rp {{ number_format($total, 0, ',', '.') }}
+                            </span>
+                            <input type="hidden"
+                                name="shipping_cost"
+                                id="shippingInput"
+                                value="{{ $shipping }}">
 
                         </div>
+                        <button type="submit"
+                            class="btn btn-success w-100 mt-4 py-3 rounded-3 fw-semibold">
+                            <i class="fas fa-lock me-2"></i>
+                             Proses Pembayaran
+                        </button>
+
+
                     </div>
                 </div>
 
@@ -191,5 +210,26 @@
 }
 .cursor-pointer { cursor: pointer; }
 </style>
+<script>
+document.querySelectorAll('input[name="courier"]').forEach(radio => {
+    radio.addEventListener('change', function () {
+        const shipping = parseInt(this.dataset.cost);
+        const subtotal = {{ $subtotal }};
+        const total = subtotal + shipping;
+
+        // Update ongkir di ringkasan
+        document.getElementById('shippingCost').innerText =
+            'Rp ' + shipping.toLocaleString('id-ID');
+
+        // Update total
+        document.getElementById('totalAmount').innerText =
+            'Rp ' + total.toLocaleString('id-ID');
+
+        // Kirim ongkir ke backend
+        document.getElementById('shippingInput').value = shipping;
+    });
+});
+</script>
+
 
 @endsection
