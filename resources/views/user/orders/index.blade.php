@@ -22,6 +22,21 @@
             </div>
         </div>
 
+        {{-- Alert Messages --}}
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        @endif
+
         {{-- Search Bar --}}
         <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
             <div class="card-body p-3">
@@ -58,7 +73,7 @@
                             'all' => ['label'=>'Semua', 'color'=>'#6c757d'],
                             'pending' => ['label'=>'Menunggu Pembayaran', 'color'=>'#ffc107'],
                             'processing' => ['label'=>'Diproses', 'color'=>'#0dcaf0'],
-                            'shipping' => ['label'=>'Dikirim', 'color'=>'#0d6efd'],
+                            'shipped' => ['label'=>'Dikirim', 'color'=>'#0d6efd'],
                             'completed' => ['label'=>'Selesai', 'color'=>'#198754'],
                             'cancelled' => ['label'=>'Dibatalkan', 'color'=>'#dc3545'],
                         ];

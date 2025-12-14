@@ -12,18 +12,18 @@ use App\Http\Controllers\Admin\PurchaseHistoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\user\CartController;
+use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\user\ProfileController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\user\CategoryController as userCategoryController;
+use App\Http\Controllers\User\CategoryController as UserCategoryController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\User\OrderController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Produsen\ProdukProdusenController;
-
-
 
 // ============================================
 // FRONTEND / USER ROUTES
@@ -42,20 +42,25 @@ Route::get('/user/shop', [HomeController::class, 'shop'])->name('user.shop');
 Route::get('/category/{slug}', [UserCategoryController::class, 'show'])->name('category.show');
 Route::get('/categories', [UserCategoryController::class, 'index'])->name('categories.index');
 
+// About & Register
+Route::get('/about', function () {
+    return view('user.pages.about');
+});
+
+Route::get('/register', function () {
+    return redirect()->route('user.register');
+});
 
 // ============================================
 // USER PROFILE (LOGIN REQUIRED)
 // ============================================
-use App\Http\Controllers\user\CheckoutController;
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('user.checkout.process');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
-
 
 // ============================================
 // CART SYSTEM (USER)
@@ -75,20 +80,32 @@ Route::get('/cart/add/{id}', function () {
     return redirect()->back()->with('error', 'Gunakan tombol untuk menambah ke keranjang.');
 });
 
-
 // ============================================
-// USER ORDER ROUTES
+// CHECKOUT SYSTEM (USER)
 // ============================================
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/orders', [App\Http\Controllers\user\OrderController::class, 'index'])->name('user.orders');
-    Route::get('/orders/pay/{id}', [App\Http\Controllers\user\OrderController::class, 'pay'])->name('user.orders.pay');
-    Route::patch('/orders/complete/{id}', [App\Http\Controllers\user\OrderController::class, 'complete'])->name('user.orders.complete');
-    Route::patch('/orders/cancel/{id}', [App\Http\Controllers\user\OrderController::class, 'cancel'])->name('user.orders.cancel');
-    Route::get('/orders', [\App\Http\Controllers\User\OrderController::class, 'index'])
-        ->name('user.orders.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('user.checkout.process');
 });
 
+// ============================================
+// USER ORDER ROUTES - DENGAN DAN TANPA PREFIX
+// ============================================
+
+// Route dengan prefix /user (user.orders.index)
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{orderNumber}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{id}/pay', [OrderController::class, 'pay'])->name('orders.pay');
+    Route::post('/orders/{id}/complete', [OrderController::class, 'complete'])->name('orders.complete');
+    Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+});
+
+// Route tanpa prefix untuk akses langsung /orders
+Route::middleware('auth')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.direct');
+});
 
 // ============================================
 // DEFAULT LOGIN ROUTE (IMPORTANT!)
@@ -97,7 +114,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/login', function () {
     return redirect()->route('user.login');
 })->name('login');
-
 
 // ============================================
 // ADMIN AUTH
@@ -111,7 +127,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-
 // ============================================
 // USER AUTH
 // ============================================
@@ -124,7 +139,6 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::post('/logout', [LoginController::class, 'userLogout'])->name('logout');
 });
 
-
 // ============================================
 // PRODUSEN AUTH
 // ============================================
@@ -134,7 +148,6 @@ Route::prefix('produsen')->name('produsen.')->group(function () {
     Route::post('/login', [LoginController::class, 'produsenLogin'])->name('login.post');
     Route::post('/logout', [LoginController::class, 'produsenLogout'])->name('logout');
 });
-
 
 // ============================================
 // ADMIN PANEL (LOGIN + ROLE ADMIN)
@@ -210,7 +223,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/reports/sales', [\App\Http\Controllers\Admin\ReportController::class, 'sales'])->name('reports.sales');
 });
 
-
 // ============================================
 // PRODUSEN DASHBOARD (LOGIN + ROLE PRODUSEN)
 // ============================================
@@ -221,8 +233,11 @@ Route::prefix('produsen')->name('produsen.')->middleware(['auth', 'role:produsen
     })->name('dashboard');
 
     Route::get('/produk', [ProdukProdusenController::class, 'index'])->name('produk');
+    
+    Route::get('/reports', [App\Http\Controllers\Produsen\ReportController::class, 'index'])->name('reports');
+    
+    Route::resource('promo', App\Http\Controllers\Produsen\PromoController::class);
 });
-
 
 // ============================================
 // LOGOUT FALLBACK
@@ -242,7 +257,6 @@ Route::get('/logout', function (Request $request) {
     return redirect('/user/login');
 });
 
-
 // ============================================
 // TEST ROUTE
 // ============================================
@@ -258,29 +272,3 @@ Route::get('/force-logout', function () {
     request()->session()->regenerateToken();
     return redirect('/admin/login')->with('message', 'Logout berhasil!');
 });
-
-Route::middleware(['auth'])->prefix('produsen')->group(function () {
-    Route::get('/reports', [App\Http\Controllers\Produsen\ReportController::class, 'index'])
-        ->name('produsen.reports');
-    
-    Route::resource('promo', App\Http\Controllers\Produsen\PromoController::class)
-        ->names([
-            'index' => 'produsen.promo.index',
-            'create' => 'produsen.promo.create',
-            'store' => 'produsen.promo.store',
-            'show' => 'produsen.promo.show',
-            'edit' => 'produsen.promo.edit',
-            'update' => 'produsen.promo.update',
-            'destroy' => 'produsen.promo.destroy',
-        ]);
-});
-
-Route::get('/about', function () {
-    return view('user.pages.about');
-});
-
-Route::get('/register', function () {
-    return redirect()->route('user.register');
-});
-
-

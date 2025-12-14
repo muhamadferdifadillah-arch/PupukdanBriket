@@ -135,7 +135,7 @@
                             ] as $key => $val)
 
                             <label class="payment-option border rounded p-3 mb-3 d-flex align-items-center gap-3 cursor-pointer">
-                                <input type="radio" name="payment_method" value="{{ $key }}">
+                                <input type="radio" name="payment_method" value="{{ $key }}" required>
                                 <i class="fas {{ $val[2] }} fs-4 text-success"></i>
                                 <div>
                                     <strong>{{ $val[0] }}</strong>
@@ -156,18 +156,40 @@
 
                             <h5 class="fw-bold mb-3 text-dark">Ringkasan Pesanan</h5>
 
+                            <!-- Daftar Produk -->
+                            <div class="order-items mb-3">
+                                @foreach($cartItems as $item)
+                                <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+                                    <img src="{{ asset($item->image ?? 'user/images/product-thumb-1.png') }}" 
+                                        alt="{{ $item->name }}" 
+                                        class="rounded"
+                                        style="width: 60px; height: 60px; object-fit: cover;">
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold">{{ $item->name }}</div>
+                                        <small class="text-muted">{{ $item->quantity }}x Rp {{ number_format($item->price, 0, ',', '.') }}</small>
+                                    </div>
+                                    <div class="fw-semibold text-success">
+                                        Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+
                             <hr>
 
-                           <div class="d-flex justify-content-between mb-2">
-                                <span>Subtotal</span>
-                                <strong>Rp {{ number_format($subtotal, 0, ',', '.') }}</strong>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal ({{ $cartItems->sum('quantity') }} items)</span>
+                                <strong id="subtotalAmount">Rp {{ number_format($subtotal, 0, ',', '.') }}</strong>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tax (10%)</span>
+                                <strong id="taxAmount">Rp {{ number_format($tax, 0, ',', '.') }}</strong>
                             </div>
 
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Ongkos Kirim</span>
-                                <strong id="shippingCost">
-                                    Rp {{ number_format($shipping, 0, ',', '.') }}
-                                    </strong>
+                                <strong id="shippingCost">Rp {{ number_format($shipping, 0, ',', '.') }}</strong>
                             </div>
 
                             <hr>
@@ -175,26 +197,24 @@
                             <div class="d-flex justify-content-between">
                                 <span class="fw-bold fs-5">Total</span>
                                 <span class="fw-bold fs-5 text-success" id="totalAmount">
-                                     Rp {{ number_format($total, 0, ',', '.') }}
-                            </span>
-                            <input type="hidden"
-                                name="shipping_cost"
-                                id="shippingInput"
-                                value="{{ $shipping }}">
+                                    Rp {{ number_format($total, 0, ',', '.') }}
+                                </span>
+                            </div>
+
+                            <input type="hidden" name="shipping_cost" id="shippingInput" value="{{ $shipping }}">
+
+                            <button type="submit" class="btn btn-success w-100 mt-4 py-3 rounded-3 fw-semibold">
+                                <i class="fas fa-lock me-2"></i>
+                                Proses Pembayaran
+                            </button>
 
                         </div>
-                        <button type="submit"
-                            class="btn btn-success w-100 mt-4 py-3 rounded-3 fw-semibold">
-                            <i class="fas fa-lock me-2"></i>
-                             Proses Pembayaran
-                        </button>
-
-
                     </div>
                 </div>
 
-            </div>
-        </form>
+            </div> {{-- ✅ PERBAIKAN: Tutup row g-4 --}}
+        </form> {{-- ✅ PERBAIKAN: Tutup form --}}
+
     </div>
 </div>
 
@@ -210,26 +230,69 @@
 }
 .cursor-pointer { cursor: pointer; }
 </style>
+
 <script>
+// Data dari backend
+const subtotal = {{ $subtotal }};
+const tax = {{ $tax }};
+
+// Update ongkir saat pilih courier
 document.querySelectorAll('input[name="courier"]').forEach(radio => {
     radio.addEventListener('change', function () {
         const shipping = parseInt(this.dataset.cost);
-        const subtotal = {{ $subtotal }};
-        const total = subtotal + shipping;
+        const total = subtotal + tax + shipping;
 
-        // Update ongkir di ringkasan
         document.getElementById('shippingCost').innerText =
             'Rp ' + shipping.toLocaleString('id-ID');
 
-        // Update total
         document.getElementById('totalAmount').innerText =
             'Rp ' + total.toLocaleString('id-ID');
 
-        // Kirim ongkir ke backend
         document.getElementById('shippingInput').value = shipping;
     });
 });
-</script>
 
+// Validasi form sebelum submit
+document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+    // Validasi courier
+    const courierSelected = document.querySelector('input[name="courier"]:checked');
+    if (!courierSelected) {
+        e.preventDefault();
+        alert('Silakan pilih metode pengiriman!');
+        return false;
+    }
+
+    // Validasi payment
+    const paymentSelected = document.querySelector('input[name="payment_method"]:checked');
+    if (!paymentSelected) {
+        e.preventDefault();
+        alert('Silakan pilih metode pembayaran!');
+        return false;
+    }
+
+    // Validasi shipping cost
+    const shippingCost = parseInt(document.getElementById('shippingInput').value);
+    if (!shippingCost || shippingCost === 0) {
+        e.preventDefault();
+        alert('Silakan pilih metode pengiriman terlebih dahulu!');
+        return false;
+    }
+
+    // Log untuk debugging
+    console.log('Form validated successfully!');
+    console.log('Courier:', courierSelected.value);
+    console.log('Payment:', paymentSelected.value);
+    console.log('Shipping Cost:', shippingCost);
+});
+
+// Auto-select first courier (opsional)
+document.addEventListener('DOMContentLoaded', function() {
+    const firstCourier = document.querySelector('input[name="courier"]');
+    if (firstCourier && !document.querySelector('input[name="courier"]:checked')) {
+        firstCourier.checked = true;
+        firstCourier.dispatchEvent(new Event('change'));
+    }
+});
+</script>
 
 @endsection

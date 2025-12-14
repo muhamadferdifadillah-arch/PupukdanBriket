@@ -1,5 +1,3 @@
-{{-- File: resources/views/pages/cart.blade.php --}}
-
 <!DOCTYPE html>
 <html lang="id">
 

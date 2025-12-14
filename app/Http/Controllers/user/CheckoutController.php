@@ -11,41 +11,49 @@ class CheckoutController extends Controller
 {
     // Halaman checkout
     public function index()
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        $cartItems = DB::table('cart as c')
-            ->join('products as p', 'c.product_id', '=', 'p.id')
-            ->where('c.user_id', $user->id)
-            ->select(
-                'c.product_id',
-                'c.quantity',
-                'p.name',
-                'p.image',
-                'p.price'
-            )
-            ->get();
+    $cartItems = DB::table('cart as c')
+        ->join('products as p', 'c.product_id', '=', 'p.id')
+        ->where('c.user_id', $user->id)
+        ->select(
+            'c.product_id',
+            'c.quantity',
+            'p.name',
+            'p.image',
+            'p.price'
+            // HAPUS 'p.category' jika kolom tidak ada
+        )
+        ->get();
 
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index');
-        }
-
-        // HITUNG ULANG SUBTOTAL
-        $subtotal = $cartItems->sum(function ($item) {
-            return $item->price * $item->quantity;
-        });
-
-        $shipping = 15000; // ongkir (bisa dinamis nanti)
-        $total = $subtotal + $shipping;
-
-        return view('user.checkout', compact(
-            'user',
-            'cartItems',
-            'subtotal',
-            'shipping',
-            'total'
-        ));
+    if ($cartItems->isEmpty()) {
+        return redirect()->route('cart.index');
     }
+
+    // HITUNG SUBTOTAL (harga * quantity)
+    $subtotal = $cartItems->sum(function ($item) {
+        return $item->price * $item->quantity;
+    });
+
+    // HITUNG TAX 10%
+    $tax = $subtotal * 0.10;
+
+    // ONGKIR default 0 (akan diupdate via JavaScript)
+    $shipping = 0;
+
+    // TOTAL = Subtotal + Tax + Shipping
+    $total = $subtotal + $tax + $shipping;
+
+    return view('user.checkout', compact(
+        'user',
+        'cartItems',
+        'subtotal',
+        'tax',
+        'shipping',
+        'total'
+    ));
+}
 
     // Proses checkout
     public function process(Request $request)
@@ -59,6 +67,7 @@ class CheckoutController extends Controller
             'postal_code' => 'required',
             'courier' => 'required',
             'payment_method' => 'required',
+            'shipping_cost' => 'required|numeric', // validasi shipping
         ]);
 
         $userId = Auth::id();
@@ -76,7 +85,7 @@ class CheckoutController extends Controller
             ->get();
 
         if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index');
+            return redirect()->route('cart.index')->with('error', 'Keranjang kosong');
         }
 
         // HITUNG ULANG TOTAL (ANTI MANIPULASI)
@@ -84,9 +93,14 @@ class CheckoutController extends Controller
             return $item->price * $item->quantity;
         });
 
-        $shipping = (int) $request->shipping_cost;
-        $totalAmount = $subtotal + $shipping;
+        // HITUNG TAX 10%
+        $tax = $subtotal * 0.10;
 
+        // AMBIL SHIPPING DARI REQUEST
+        $shipping = (int) $request->shipping_cost;
+
+        // TOTAL = Subtotal + Tax + Shipping
+        $totalAmount = $subtotal + $tax + $shipping;
 
         DB::beginTransaction();
 
@@ -99,9 +113,12 @@ class CheckoutController extends Controller
                 'customer_name' => $request->full_name,
                 'customer_phone' => $request->phone,
                 'shipping_address' => $request->address,
-                'total_amount' => $totalAmount,
+                'subtotal' => $subtotal,
+                'tax' => $tax,
                 'shipping_cost' => $shipping,
+                'total_amount' => $totalAmount,
                 'payment_method' => $request->payment_method,
+                'courier' => $request->courier,
                 'status' => 'pending',
                 'created_at' => now(),
                 'updated_at' => now()
@@ -119,17 +136,17 @@ class CheckoutController extends Controller
                 ]);
             }
 
+            // Hapus cart setelah order berhasil
             DB::table('cart')->where('user_id', $userId)->delete();
 
             DB::commit();
 
             return redirect()->route('user.orders.index')
-                ->with('success', 'Pesanan berhasil dibuat');
-
+                ->with('success', 'Pesanan berhasil dibuat dengan nomor: ' . $orderNumber);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan saat memproses pesanan');
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -137,12 +154,17 @@ class CheckoutController extends Controller
     {
         $order = DB::table('orders')
             ->where('order_number', $orderNumber)
+            ->where('user_id', Auth::id())
             ->first();
 
         if (!$order) {
             return redirect()->route('cart.index');
         }
 
-        return view('user.order-success', compact('order'));
+        $orderItems = DB::table('order_items')
+            ->where('order_id', $order->id)
+            ->get();
+
+        return view('user.order-success', compact('order', 'orderItems'));
     }
 }
