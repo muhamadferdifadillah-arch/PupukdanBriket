@@ -79,15 +79,6 @@
                 <span class="hide-menu">Register</span>
               </a>
 
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="#" aria-expanded="false">
-                <i class="ti ti-message-dots"></i>
-                <span class="hide-menu">Chat</span>
-              </a>
-            </li>
-
             <li>
               <span class="sidebar-divider lg"></span>
             </li>
@@ -108,12 +99,6 @@
               <a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
                 <i class="ti ti-menu-2"></i>
               </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="javascript:void(0)" id="drop1" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="ti ti-bell"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
               <div class="dropdown-menu dropdown-menu-animate-up" aria-labelledby="drop1">
                 <div class="message-body">
                   <a href="javascript:void(0)" class="dropdown-item">
@@ -122,9 +107,7 @@
                         <img src="{{ asset('admin/assets/images/profile/user-3.jpg') }}" alt="" class="rounded-circle"
                           width="32">
                       </span>
-                      <div>
-                        <h6 class="mb-0">New notification</h6>
-                        <span class="fs-2 text-muted">Just now</span>
+
                       </div>
                     </div>
                   </a>

@@ -546,6 +546,7 @@
                 </a>
               </figure>
 
+
               <!-- Produk Nama -->
               <h5 class="mt-3">{{ $product->name }}</h5>
 

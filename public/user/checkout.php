@@ -231,7 +231,7 @@ foreach ($cart_items as $item) {
                         <div>🏦 Transfer</div>
                     </label>
                     <label class="payment-method">
-                        <input type="radio" name="payment_method" value="E-Wallet">
+                        <input type="radio" name="payment_method" value="e-wallet">
                         <div>📱 E-Wallet</div>
                     </label>
                 </div>

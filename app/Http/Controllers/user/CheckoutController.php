@@ -9,121 +9,72 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
-    // Halaman checkout
     public function index()
-{
-    $user = Auth::user();
-
-    $cartItems = DB::table('cart as c')
-        ->join('products as p', 'c.product_id', '=', 'p.id')
-        ->where('c.user_id', $user->id)
-        ->select(
-            'c.product_id',
-            'c.quantity',
-            'p.name',
-            'p.image',
-            'p.price'
-            // HAPUS 'p.category' jika kolom tidak ada
-        )
-        ->get();
-
-    if ($cartItems->isEmpty()) {
-        return redirect()->route('cart.index');
-    }
-
-    // HITUNG SUBTOTAL (harga * quantity)
-    $subtotal = $cartItems->sum(function ($item) {
-        return $item->price * $item->quantity;
-    });
-
-    // HITUNG TAX 10%
-    $tax = $subtotal * 0.10;
-
-    // ONGKIR default 0 (akan diupdate via JavaScript)
-    $shipping = 0;
-
-    // TOTAL = Subtotal + Tax + Shipping
-    $total = $subtotal + $tax + $shipping;
-
-    return view('user.checkout', compact(
-        'user',
-        'cartItems',
-        'subtotal',
-        'tax',
-        'shipping',
-        'total'
-    ));
-}
-
-    // Proses checkout
-    public function process(Request $request)
     {
-        $request->validate([
-            'full_name' => 'required',
-            'phone' => 'required',
-            'address' => 'required',
-            'province_id' => 'required',
-            'city_id' => 'required',
-            'postal_code' => 'required',
-            'courier' => 'required',
-            'payment_method' => 'required',
-            'shipping_cost' => 'required|numeric', // validasi shipping
-        ]);
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
 
-        $userId = Auth::id();
-
+        $user = Auth::user();
         $cartItems = DB::table('cart as c')
             ->join('products as p', 'c.product_id', '=', 'p.id')
-            ->where('c.user_id', $userId)
-            ->select(
-                'c.product_id',
-                'c.quantity',
-                'p.name',
-                'p.image',
-                'p.price'
-            )
+            ->where('c.user_id', $user->id)
+            ->select('c.product_id', 'c.quantity', 'p.name', 'p.image', 'p.price')
             ->get();
 
         if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Keranjang kosong');
+            return redirect()->route('cart.index');
         }
 
-        // HITUNG ULANG TOTAL (ANTI MANIPULASI)
-        $subtotal = $cartItems->sum(function ($item) {
-            return $item->price * $item->quantity;
-        });
-
-        // HITUNG TAX 10%
+        $subtotal = $cartItems->sum(fn($i) => $i->price * $i->quantity);
         $tax = $subtotal * 0.10;
+        $shipping = 0;
+        $total = $subtotal + $tax;
 
-        // AMBIL SHIPPING DARI REQUEST
-        $shipping = (int) $request->shipping_cost;
+        return view('user.checkout', compact('user', 'cartItems', 'subtotal', 'tax', 'shipping', 'total'));
+    }
 
-        // TOTAL = Subtotal + Tax + Shipping
-        $totalAmount = $subtotal + $tax + $shipping;
+    public function process(Request $request)
+    {
+        $userId = Auth::id();
+        
+        // GET CART
+        $cartItems = DB::table('cart')
+            ->join('products', 'cart.product_id', '=', 'products.id')
+            ->where('cart.user_id', $userId)
+            ->select('cart.product_id', 'cart.quantity', 'products.name', 'products.price', 'products.image')
+            ->get();
 
-        DB::beginTransaction();
+        if ($cartItems->isEmpty()) {
+            return back()->with('error', 'Keranjang kosong');
+        }
+
+        // CALCULATE
+        $subtotal = $cartItems->sum(fn($i) => $i->price * $i->quantity);
+        $tax = $subtotal * 0.1;
+        $shipping = (int) ($request->shipping_cost ?? 0);
+        $total = $subtotal + $tax + $shipping;
 
         try {
-            $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
-
+            // INSERT ORDER
             $orderId = DB::table('orders')->insertGetId([
                 'user_id' => $userId,
-                'order_number' => $orderNumber,
-                'customer_name' => $request->full_name,
-                'customer_phone' => $request->phone,
-                'shipping_address' => $request->address,
+                'order_number' => 'ORD-' . time(),
+                'customer_name' => $request->full_name ?? 'Customer',
+                'customer_phone' => $request->phone ?? '000',
+                'shipping_address' => $request->address ?? 'Address',
                 'subtotal' => $subtotal,
                 'tax' => $tax,
                 'shipping_cost' => $shipping,
-                'total_amount' => $totalAmount,
-                'payment_method' => $request->payment_method,
-                'courier' => $request->courier,
+                'total_amount' => $total,
+                'payment_method' => $request->payment_method ?? 'transfer',
+                'courier' => $request->courier ?? 'jne',
                 'status' => 'pending',
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
 
+            // INSERT ITEMS
             foreach ($cartItems as $item) {
                 DB::table('order_items')->insert([
                     'order_id' => $orderId,
@@ -133,38 +84,18 @@ class CheckoutController extends Controller
                     'quantity' => $item->quantity,
                     'price' => $item->price,
                     'subtotal' => $item->price * $item->quantity,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
 
-            // Hapus cart setelah order berhasil
+            // CLEAR CART
             DB::table('cart')->where('user_id', $userId)->delete();
 
-            DB::commit();
-
-            return redirect()->route('user.orders.index')
-                ->with('success', 'Pesanan berhasil dibuat dengan nomor: ' . $orderNumber);
+            return redirect('/')->with('success', 'Pesanan berhasil dibuat! Terima kasih telah berbelanja.');
 
         } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return back()->with('error', 'Gagal: ' . $e->getMessage());
         }
-    }
-
-    public function success($orderNumber)
-    {
-        $order = DB::table('orders')
-            ->where('order_number', $orderNumber)
-            ->where('user_id', Auth::id())
-            ->first();
-
-        if (!$order) {
-            return redirect()->route('cart.index');
-        }
-
-        $orderItems = DB::table('order_items')
-            ->where('order_id', $order->id)
-            ->get();
-
-        return view('user.order-success', compact('order', 'orderItems'));
     }
 }

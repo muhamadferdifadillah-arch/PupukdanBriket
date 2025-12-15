@@ -7,17 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'order_number',
         'total_amount',
-        'status',
-        'payment_method',
-        'shipping_address',
+        'shipping_cost',
+        'status'
     ];
-
+    
     /**
      * Relasi ke User
      */

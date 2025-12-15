@@ -22,7 +22,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\user\CheckoutController;
 use App\Http\Controllers\user\OrderController;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Produsen\ProdukProdusenController;
 
 // ============================================
@@ -272,3 +272,30 @@ Route::get('/force-logout', function () {
     request()->session()->regenerateToken();
     return redirect('/admin/login')->with('message', 'Logout berhasil!');
 });
+
+// ============================================
+// FILE HANDLER ROUTE (HARUS DI PALING ATAS!)
+// ============================================
+
+Route::get('/file/{path}', function ($path) {
+    $path = urldecode($path);
+ 
+    if (!Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+    
+    return response()->file(Storage::disk('public')->path($path));
+})->where('path', '.*')->name('file.serve');
+
+// Tambahkan route ini untuk backward compatibility
+Route::get('/file/uploads/{path}', function ($path) {
+    // Redirect ke path yang benar
+    $correctPath = str_replace('uploads/products/', 'products/', $path);
+    $path = urldecode($correctPath);
+ 
+    if (!Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+    
+    return response()->file(Storage::disk('public')->path($path));
+})->where('path', '.*');

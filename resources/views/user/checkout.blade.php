@@ -129,10 +129,11 @@
                             </h5>
 
                             @foreach([
-                                'bank_transfer' => ['Transfer Bank', 'BCA, Mandiri, BNI, BRI', 'fa-university'],
-                                'ewallet' => ['E-Wallet', 'Gopay, OVO, Dana, ShopeePay', 'fa-wallet'],
-                                'cod' => ['COD (Bayar Ditempat)', 'Pembayaran saat barang tiba', 'fa-money-bill-wave'],
+                                'transfer' => ['Transfer Bank', 'BCA, Mandiri, BNI, BRI', 'fa-university'],
+                                'e-wallet' => ['E-Wallet', 'Gopay, OVO, Dana, ShopeePay', 'fa-wallet'],
+                                'cash' => ['COD (Bayar Ditempat)', 'Pembayaran saat barang tiba', 'fa-money-bill-wave'],
                             ] as $key => $val)
+
 
                             <label class="payment-option border rounded p-3 mb-3 d-flex align-items-center gap-3 cursor-pointer">
                                 <input type="radio" name="payment_method" value="{{ $key }}" required>

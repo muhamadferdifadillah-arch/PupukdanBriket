@@ -10,18 +10,27 @@ use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
+    /**
+     * Tampilkan daftar pesanan user
+     */
     public function index(Request $request)
     {
         $userId = Auth::id();
         
+        // ✅ AMBIL STATUS DARI REQUEST (default: 'all')
+        $status = $request->get('status', 'all');
+        
+        // Query orders
         $query = DB::table('orders')
             ->where('user_id', $userId)
             ->orderBy('created_at', 'desc');
 
-        if ($request->has('status') && $request->status !== 'all') {
-            $query->where('status', $request->status);
+        // ✅ FILTER BY STATUS
+        if ($status !== 'all' && in_array($status, ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])) {
+            $query->where('status', $status);
         }
 
+        // ✅ SEARCH FUNCTIONALITY
         if ($request->has('search') && $request->search) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -30,16 +39,27 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $query->paginate(10);
+        // ✅ GET RESULTS
+        $orders = $query->get(); // Bisa juga pakai ->paginate(10) jika mau pagination
 
-        return view('user.orders.index', compact('orders'));
+        // ✅ PASS $status KE VIEW (INI YANG PENTING!)
+        return view('user.orders.index', compact('orders', 'status'));
     }
 
+    /**
+     * Tampilkan detail pesanan
+     */
     public function show($orderNumber)
     {
+        $userId = Auth::id();
+        
+        // ✅ CARI ORDER BERDASARKAN order_number ATAU id
         $order = DB::table('orders')
-            ->where('order_number', $orderNumber)
-            ->where('user_id', Auth::id())
+            ->where('user_id', $userId)
+            ->where(function($query) use ($orderNumber) {
+                $query->where('order_number', $orderNumber)
+                      ->orWhere('id', $orderNumber);
+            })
             ->first();
 
         if (!$order) {
@@ -47,6 +67,7 @@ class OrderController extends Controller
                 ->with('error', 'Pesanan tidak ditemukan');
         }
 
+        // ✅ AMBIL ORDER ITEMS
         $orderItems = DB::table('order_items')
             ->where('order_id', $order->id)
             ->get();
@@ -54,6 +75,9 @@ class OrderController extends Controller
         return view('user.orders.show', compact('order', 'orderItems'));
     }
 
+    /**
+     * Selesaikan pesanan (status: shipped → completed)
+     */
     public function complete($id)
     {
         try {
@@ -68,17 +92,26 @@ class OrderController extends Controller
 
             if ($updated) {
                 Log::info('Order completed', ['order_id' => $id, 'user_id' => Auth::id()]);
-                return redirect()->back()->with('success', 'Pesanan berhasil diselesaikan!');
+                return redirect()->route('user.orders.index')
+                    ->with('success', 'Pesanan berhasil diselesaikan!');
             }
 
-            return redirect()->back()->with('error', 'Gagal menyelesaikan pesanan.');
+            return redirect()->back()
+                ->with('error', 'Gagal menyelesaikan pesanan. Pastikan status pesanan adalah "Dikirim".');
 
         } catch (\Exception $e) {
-            Log::error('Complete order error', ['order_id' => $id, 'error' => $e->getMessage()]);
-            return redirect()->back()->with('error', 'Terjadi kesalahan.');
+            Log::error('Complete order error', [
+                'order_id' => $id, 
+                'error' => $e->getMessage()
+            ]);
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
+    /**
+     * Batalkan pesanan (status: pending → cancelled)
+     */
     public function cancel($id)
     {
         try {
@@ -93,17 +126,26 @@ class OrderController extends Controller
 
             if ($updated) {
                 Log::info('Order cancelled', ['order_id' => $id, 'user_id' => Auth::id()]);
-                return redirect()->back()->with('success', 'Pesanan berhasil dibatalkan!');
+                return redirect()->route('user.orders.index')
+                    ->with('success', 'Pesanan berhasil dibatalkan!');
             }
 
-            return redirect()->back()->with('error', 'Gagal membatalkan pesanan.');
+            return redirect()->back()
+                ->with('error', 'Gagal membatalkan pesanan. Hanya pesanan dengan status "Menunggu Pembayaran" yang bisa dibatalkan.');
 
         } catch (\Exception $e) {
-            Log::error('Cancel order error', ['order_id' => $id, 'error' => $e->getMessage()]);
-            return redirect()->back()->with('error', 'Terjadi kesalahan.');
+            Log::error('Cancel order error', [
+                'order_id' => $id, 
+                'error' => $e->getMessage()
+            ]);
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
+    /**
+     * Halaman pembayaran
+     */
     public function pay($id)
     {
         $order = DB::table('orders')
