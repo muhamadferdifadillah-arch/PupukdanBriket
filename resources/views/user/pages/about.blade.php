@@ -607,7 +607,7 @@
                             </a>
 
                             <!-- Instagram -->
-                            <a href="https://instagram.com/username_tiara" target="_blank" class="social-link">
+                            <a href="https://instagram.com/tiaraanurhidayah" target="_blank" class="social-link">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="2" y="2" width="20" height="20" rx="5"></rect>
                                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -641,7 +641,7 @@
                             </a>
 
                             <!-- Instagram -->
-                            <a href="https://instagram.com/username_ferdi" target="_blank" class="social-link">
+                            <a href="https://instagram.com/mfrdifdlah" target="_blank" class="social-link">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="2" y="2" width="20" height="20" rx="5"></rect>
                                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -675,7 +675,7 @@
                             </a>
 
                             <!-- Instagram -->
-                            <a href="https://instagram.com/username_ghaitsa" target="_blank" class="social-link">
+                            <a href="https://instagram.com/ghaitsazhirasfhia" target="_blank" class="social-link">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="2" y="2" width="20" height="20" rx="5"></rect>
                                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>

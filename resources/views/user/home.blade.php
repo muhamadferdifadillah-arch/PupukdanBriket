@@ -468,7 +468,7 @@
                 </svg>
               </div>
               <div class="col-9">
-                <h5 class="text-white mb-1">Fresh from Farm</h5>
+                <h5 class="text-white mb-1">Fresh from the farm</h5>
                 <p class="mb-0 small">Quality guaranteed products</p>
               </div>
             </div>
