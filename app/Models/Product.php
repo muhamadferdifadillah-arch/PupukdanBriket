@@ -89,4 +89,29 @@ class Product extends Model
 
         return round((($this->price - $this->discount_price) / $this->price) * 100);
     }
+
+    /**
+     * Get full image URL
+     * Accessor untuk handle berbagai format path gambar
+     */
+    public function getImageUrlAttribute()
+    {
+        // Jika image kosong, return placeholder
+        if (!$this->image) {
+            return asset('images/no-image.png');
+        }
+
+        // Jika sudah full URL (http/https)
+        if (str_starts_with($this->image, 'http')) {
+            return $this->image;
+        }
+
+        // Jika sudah ada path lengkap uploads/products/
+        if (str_contains($this->image, 'uploads/products/')) {
+            return asset($this->image);
+        }
+
+        // Jika cuma filename saja (hasil UPDATE REPLACE tadi)
+        return asset('uploads/products/' . $this->image);
+    }
 }
