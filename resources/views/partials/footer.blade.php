@@ -15,7 +15,7 @@
           <ul class="list-unstyled">
             <li class="mb-2"><a href="#">Tentang Kami</a></li>
             <li class="mb-2"><a href="#">Produk & Kategori</a></li>
-            <li class="mb-2"><a href="#">Kontak Kami</a></li>
+            <li class="mb-2"><a href="#">Shop</a></li>
           </ul>
         </div>
 

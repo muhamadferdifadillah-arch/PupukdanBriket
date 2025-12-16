@@ -69,25 +69,29 @@
                 <span class="hide-menu">eCommerce</span>
               </a>
             </li>
+            
             <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('admin.login') }}" aria-expanded="false">
                 <i class="ti ti-login"></i>
                 <span class="hide-menu">Login</span>
               </a>
+            </li>
+            
+            <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('admin.register') }}" aria-expanded="false">
                 <i class="ti ti-user-plus"></i>
                 <span class="hide-menu">Register</span>
               </a>
+            </li>
 
             <li>
               <span class="sidebar-divider lg"></span>
-            </li>
-              </a>
             </li>
           </ul>
         </nav>
       </div>
     </aside>
+    <!-- Sidebar End -->
 
     <!-- Main wrapper -->
     <div class="body-wrapper">
@@ -99,65 +103,64 @@
               <a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
                 <i class="ti ti-menu-2"></i>
               </a>
-              <div class="dropdown-menu dropdown-menu-animate-up" aria-labelledby="drop1">
-                <div class="message-body">
-                  <a href="javascript:void(0)" class="dropdown-item">
-                    <div class="d-flex align-items-center gap-3 py-2">
-                      <span class="flex-shrink-0">
-                        <img src="{{ asset('admin/assets/images/profile/user-3.jpg') }}" alt="" class="rounded-circle"
-                          width="32">
-                      </span>
-
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </div>
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
               <li class="nav-item dropdown">
-                <a class="nav-link" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                <a class="nav-link" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
                   <img src="{{ asset('admin/assets/images/profile/user-1.jpg') }}" alt="" width="35" height="35"
                     class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
+                    <a href="{{ route('admin.profile') }}" class="d-flex align-items-center gap-2 dropdown-item">
+                      <i class="ti ti-user fs-6"></i>
+                      <p class="mb-0 fs-3">My Profile</p>
+                    </a>
 
-                        <a href="{{ route('admin.profile') }}" class="d-flex align-items-center gap-2 dropdown-item">
-                          <i class="ti ti-user fs-6"></i>
-                          <p class="mb-0 fs-3">My Profile</p>
-                        </a>
-
-                        <form action="{{ route('admin.logout') }}" method="POST" class="mx-3 mt-2">
-                          @csrf
-                          <button type="submit" class="btn btn-outline-primary d-block w-100">
-                            <i class="ti ti-logout"></i> Logout
-                          </button>
-                        </form>
-
-                      </div>
-                    </div>
-
+                    <form action="{{ route('admin.logout') }}" method="POST" class="mx-3 mt-2">
+                      @csrf
+                      <button type="submit" class="btn btn-outline-primary d-block w-100">
+                        <i class="ti ti-logout"></i> Logout
+                      </button>
+                    </form>
+                  </div>
+                </div>
               </li>
             </ul>
           </div>
         </nav>
       </header>
+      <!-- Header End -->
 
       <div class="body-wrapper-inner">
         <div class="container-fluid">
-          <!-- Dashboard Content -->
-          @yield('content')
+          <div class="row">
+            <div class="col-12">
+
+              {{-- CONTENT WRAPPER --}}
+              <div class="card">
+                <div class="card-body">
+
+                  @yield('content')
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
           <div class="py-6 px-6 text-center">
             <p class="mb-0 fs-4">© 2025 Manfaatin. All rights reserved.</p>
           </div>
         </div>
       </div>
     </div>
+    <!-- Main wrapper End -->
+
   </div>
+  <!-- Page wrapper End -->
 
   <script src="{{ asset('admin/assets/libs/jquery/dist/jquery.min.js') }}"></script>
   <script src="{{ asset('admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>

@@ -6,66 +6,72 @@
 <div class="container-fluid">
 
     {{-- HEADER --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="fw-bold mb-0">Dashboard Produsen</h4>
-            <small class="text-muted">Ringkasan aktivitas tokomu</small>
-        </div>
+    <div class="mb-4">
+        <h4 class="fw-bold mb-1">Dashboard Produsen</h4>
+        <small class="text-muted">Ringkasan aktivitas tokomu</small>
     </div>
 
     {{-- STAT CARDS --}}
-    <div class="row mb-4">
+    <div class="row">
 
-        <div class="col-md-3">
-            <div class="card shadow-sm">
+        {{-- Total Penjualan --}}
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
                 <div class="card-body d-flex align-items-center">
-                    <div class="bg-success text-white rounded-circle p-3">
-                        <i class="ti ti-currency-dollar"></i>
-                    </div>
+                    <span class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center"
+                          style="width:48px;height:48px;">
+                        <i class="ti ti-currency-dollar fs-5"></i>
+                    </span>
                     <div class="ms-3">
-                        <h6 class="mb-0">Total Penjualan</h6>
+                        <h6 class="mb-1 text-muted">Total Penjualan</h6>
                         <h5 class="fw-bold mb-0">Rp 25.000.000</h5>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-sm">
+        {{-- Total Produk --}}
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
                 <div class="card-body d-flex align-items-center">
-                    <div class="bg-primary text-white rounded-circle p-3">
-                        <i class="ti ti-package"></i>
-                    </div>
+                    <span class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center"
+                          style="width:48px;height:48px;">
+                        <i class="ti ti-package fs-5"></i>
+                    </span>
                     <div class="ms-3">
-                        <h6 class="mb-0">Total Produk</h6>
+                        <h6 class="mb-1 text-muted">Total Produk</h6>
                         <h5 class="fw-bold mb-0">12 Produk</h5>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-sm">
+        {{-- Promo Aktif --}}
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
                 <div class="card-body d-flex align-items-center">
-                    <div class="bg-warning text-white rounded-circle p-3">
-                        <i class="ti ti-discount-2"></i>
-                    </div>
+                    <span class="rounded-circle bg-warning text-white d-inline-flex align-items-center justify-content-center"
+                          style="width:48px;height:48px;">
+                        <i class="ti ti-discount-2 fs-5"></i>
+                    </span>
                     <div class="ms-3">
-                        <h6 class="mb-0">Promo Aktif</h6>
+                        <h6 class="mb-1 text-muted">Promo Aktif</h6>
                         <h5 class="fw-bold mb-0">3 Promo</h5>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-sm">
+        {{-- Total Pembeli --}}
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
                 <div class="card-body d-flex align-items-center">
-                    <div class="bg-info text-white rounded-circle p-3">
-                        <i class="ti ti-users"></i>
-                    </div>
+                    <span class="rounded-circle bg-info text-white d-inline-flex align-items-center justify-content-center"
+                          style="width:48px;height:48px;">
+                        <i class="ti ti-users fs-5"></i>
+                    </span>
                     <div class="ms-3">
-                        <h6 class="mb-0">Total Pembeli</h6>
+                        <h6 class="mb-1 text-muted">Total Pembeli</h6>
                         <h5 class="fw-bold mb-0">148 Orang</h5>
                     </div>
                 </div>
@@ -80,12 +86,10 @@
             <div class="card shadow-sm">
                 <div class="card-body">
 
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold mb-0">Pesanan Terbaru</h5>
-                    </div>
+                    <h5 class="fw-bold mb-3">Pesanan Terbaru</h5>
 
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
                                     <th>Produk</th>
@@ -107,7 +111,6 @@
                                         <a href="#" class="btn btn-sm btn-primary">Detail</a>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td>Teh Herbal</td>
                                     <td>1</td>

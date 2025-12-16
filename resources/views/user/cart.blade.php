@@ -1,8 +1,8 @@
-@extends('layouts.user.dashboard')
+@extends('user.layouts.app')
 
-@section('title', 'Shopping Cart - ManfaatinOnline.com')
+@section('title', 'Shopping Cart')
 
-@push('styles')
+@section('content')
 <style>
   :root{
     --primary: #16a34a;
@@ -571,7 +571,6 @@
     animation: fadeIn 0.3s ease;
   }
 </style>
-@endpush
 
 @section('content')
 <!-- Breadcrumb -->

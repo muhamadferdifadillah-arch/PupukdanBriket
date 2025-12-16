@@ -538,14 +538,11 @@
           <div class="col-lg-3 col-md-4 col-sm-6">
             <div class="product-item text-center p-3 shadow-sm rounded-3 bg-white">
 
-              <!-- Produk Image -->
-              <figure>
-                <a href="{{ url('/product/' . $product->slug) }}">
-                  <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded"
-                    style="height:180px; object-fit:cover;">
-                </a>
+              <!-- Produk Image - TANPA LINK -->
+              <figure style="cursor: default;">
+                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded"
+                  style="height:180px; object-fit:cover; pointer-events: none;">
               </figure>
-
 
               <!-- Produk Nama -->
               <h5 class="mt-3">{{ $product->name }}</h5>
@@ -554,6 +551,11 @@
               <p class="fw-bold text-dark">
                 Rp {{ number_format($product->price, 0, ',', '.') }}
               </p>
+
+              <script>
+                const isLoggedIn = @json(Auth::check());
+              </script>
+
 
               <!-- Tombol Add to Cart -->
               <button class="btn btn-primary w-100 btn-add-to-cart" data-product-id="{{ $product->id }}">
@@ -576,27 +578,26 @@
 
       buttons.forEach(button => {
         button.addEventListener('click', function () {
+
+          // ⛔ CEK LOGIN DI SINI
+          if (!isLoggedIn) {
+            window.location.href = "{{ route('login') }}";
+            return;
+          }
+
+
+          // ✅ BARU LANJUT ADD TO CART JIKA LOGIN
           let productId = this.dataset.productId;
           let oldText = this.textContent;
 
-          // Disable button
           this.disabled = true;
           this.textContent = "Adding...";
-
-          // Get CSRF token
-          const csrfToken = document.querySelector('meta[name="csrf-token"]');
-          if (!csrfToken) {
-            alert('CSRF token not found!');
-            this.disabled = false;
-            this.textContent = oldText;
-            return;
-          }
 
           fetch("{{ route('cart.add') }}", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "X-CSRF-TOKEN": csrfToken.getAttribute('content'),
+              "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
               "X-Requested-With": "XMLHttpRequest",
               "Accept": "application/json"
             },
@@ -605,34 +606,22 @@
               quantity: 1
             })
           })
-            .then(response => {
-              // Check if response is ok
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.json();
-            })
+            .then(res => res.json())
             .then(data => {
-              console.log('Response:', data); // Debug
-
               this.disabled = false;
               this.textContent = oldText;
 
               if (data.success) {
-                // Tampilkan notifikasi sukses
                 showNotification('success', data.message);
-
-                // Update cart count
                 updateCartCount(data.cart_count);
               } else {
-                showNotification('error', data.message || 'Gagal menambahkan produk');
+                showNotification('error', data.message);
               }
             })
-            .catch(err => {
-              console.error('Error:', err);
+            .catch(() => {
               this.disabled = false;
               this.textContent = oldText;
-              showNotification('error', 'Terjadi kesalahan. Silakan coba lagi.');
+              showNotification('error', 'Terjadi kesalahan');
             });
         });
       });
@@ -754,7 +743,7 @@
           <ul class="list-unstyled">
             <li class="mb-2"><a href="#">Tentang Kami</a></li>
             <li class="mb-2"><a href="#">Produk & Kategori</a></li>
-            <li class="mb-2"><a href="#">Kontak Kami</a></li>
+            <li class="mb-2"><a href="#">Shop</a></li>
           </ul>
         </div>
 

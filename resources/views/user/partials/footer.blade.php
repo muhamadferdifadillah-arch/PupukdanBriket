@@ -61,8 +61,13 @@ footer.footer-dark .btn-primary:hover {
     background-color: #0056b3 !important;
 }
 
+/* Social Media Icons - Hidden for now */
+.social-icons {
+    display: none;
+}
+
 #footer-bottom {
-    background-color: #2d2d2d !important;
+    background-color: #222 !important;
     border-top: 1px solid #404040 !important;
     padding: 20px 0 !important;
 }
@@ -77,24 +82,24 @@ footer.footer-dark .btn-primary:hover {
 <footer class="footer-dark py-5">
     <div class="container-lg">
         <div class="row g-4">
-            <!-- Logo & Tagline -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
+            <!-- Column 1: Logo & Tagline -->
+            <div class="col-lg-3 col-md-6">
                 <div class="footer-menu">
-                    <img src="{{ asset('user/images/logom.png') }}" width="200" height="100" alt="logo" class="mb-3">
+                    <img src="{{ asset('user/images/logom.png') }}" width="150" alt="logo" class="mb-3">
                     <p class="text-secondary">Sustainable solutions for a greener future</p>
                 </div>
             </div>
 
-            <!-- Quick Links -->
-            <div class="col-lg-2 col-md-6 col-sm-6">
+            <!-- Column 2: Quick Links -->
+            <div class="col-lg-3 col-md-6">
                 <div class="footer-menu">
                     <h5 class="widget-title">Quick Links</h5>
                     <ul class="menu-list list-unstyled">
                         <li class="menu-item">
-                            <a href="#" class="nav-link">Tentang Kami</a>
+                            <a href="{{ url('/about') }}" class="nav-link">Tentang Kami</a>
                         </li>
                         <li class="menu-item">
-                            <a href="#" class="nav-link">Produk & Kategori</a>
+                            <a href="{{ route('shop.index') }}" class="nav-link">Produk & Kategori</a>
                         </li>
                         <li class="menu-item">
                             <a href="#" class="nav-link">Kontak Kami</a>
@@ -103,8 +108,8 @@ footer.footer-dark .btn-primary:hover {
                 </div>
             </div>
 
-            <!-- Customer Service -->
-            <div class="col-lg-2 col-md-6 col-sm-6">
+            <!-- Column 3: Customer Service -->
+            <div class="col-lg-3 col-md-6">
                 <div class="footer-menu">
                     <h5 class="widget-title">Customer Service</h5>
                     <ul class="menu-list list-unstyled">
@@ -124,14 +129,13 @@ footer.footer-dark .btn-primary:hover {
                 </div>
             </div>
 
-            <!-- Newsletter -->
-            <div class="col-lg-5 col-md-6 col-sm-12">
+            <!-- Column 4: Newsletter -->
+            <div class="col-lg-3 col-md-6">
                 <div class="footer-menu">
                     <h5 class="widget-title">Newsletter</h5>
                     <p class="text-secondary mb-3">Subscribe to get updates</p>
                     <form class="d-flex gap-0" onsubmit="event.preventDefault(); alert('Terima kasih telah berlangganan!');">
-                        <input class="form-control" type="email" name="email"
-                            placeholder="Your email" aria-label="Email Address" required>
+                        <input class="form-control" type="email" name="email" placeholder="Your email" aria-label="Email Address" required>
                         <button class="btn btn-primary" type="submit">Subscribe</button>
                     </form>
                 </div>

@@ -36,10 +36,10 @@
             </ul>
   
             @if(isset($cartItems) && count($cartItems) > 0)
-            <a href="{{ route('user.checkout') }}" class="w-100 btn btn-primary btn-lg">Continue to checkout</a>
-            <a href="{{ route('user.cart') }}" class="w-100 btn btn-outline-primary mt-2">View Cart</a>
+            <a href="{{ url('/checkout') }}" class="w-100 btn btn-primary btn-lg">Continue to checkout</a>
+            <a href="{{ url('/cart') }}" class="w-100 btn btn-outline-primary mt-2">View Cart</a>
             @else
-            <a href="{{ route('home') }}" class="w-100 btn btn-primary btn-lg">Start Shopping</a>
+            <a href="{{ url('/') }}" class="w-100 btn btn-primary btn-lg">Start Shopping</a>
             @endif
         </div>
     </div>

@@ -5,6 +5,74 @@
 @section('content')
 
     <style>
+        /* ===== FORCE DARK FOOTER ===== */
+        footer, footer.footer-dark {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+            padding: 60px 0 30px !important;
+        }
+
+        footer .widget-title,
+        footer h5 {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            font-weight: 600 !important;
+            margin-bottom: 20px !important;
+        }
+
+        footer .text-secondary,
+        footer p {
+            color: #b0b0b0 !important;
+            font-size: 14px !important;
+        }
+
+        footer .nav-link {
+            color: #b0b0b0 !important;
+            font-size: 14px !important;
+        }
+
+        footer .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        footer .form-control {
+            background-color: #ffffff !important;
+            color: #2d2d2d !important;
+        }
+
+        footer .btn-primary {
+            background-color: #007bff !important;
+        }
+
+        .social-icon {
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #b0b0b0;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        #footer-bottom {
+            background-color: #222 !important;
+            border-top: 1px solid #404040 !important;
+            padding: 20px 0 !important;
+        }
+
+        #footer-bottom p {
+            color: #b0b0b0 !important;
+            font-size: 13px !important;
+            margin: 0 !important;
+        }
+
         /* ===== CARD ===== */
         .shop-card {
             background: #ffffff;

@@ -13,24 +13,34 @@
 
     <style>
         .app-logo {
-            padding: 20px;
+            padding: 16px 20px;
             border-bottom: 1px solid #eaeaea;
+            display: flex;
+            align-items: center;
         }
 
-        .app-logo img {
-            height: 36px;
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-sidebar {
+            width: 140px;
+            /* ✅ UKURAN SEDANG */
+            height: auto;
+            object-fit: contain;
         }
 
         .sidebar-nav ul li a.active {
             background: #3556f6;
             color: #fff !important;
         }
-    </style>
-    <style>
+
         .body-wrapper {
             padding-top: 0 !important;
         }
     </style>
+
 
 
 </head>
@@ -44,12 +54,13 @@
 
                 {{-- LOGO --}}
                 <div class="app-logo d-flex align-items-center">
-                    <a href="{{ route('produsen.dashboard') }}">
-                        {{-- GANTI LOGO DI SINI --}}
-                        <img src="{{ asset('user/images/logom.png') }}" alt="Logo" style="height:36px;">
-
+                    <a href="{{ route('produsen.dashboard') }}" class="logo-wrapper">
+                        <img src="{{ asset('admin/assets/images/logos/logom.png') }}" alt="Logo Manfaatin"
+                            class="logo-sidebar">
                     </a>
                 </div>
+
+
 
                 {{-- MENU --}}
                 <nav class="sidebar-nav scroll-sidebar">
@@ -114,40 +125,22 @@
         {{-- CONTENT --}}
         <div class="body-wrapper">
 
-            {{-- HEADER / TOPBAR --}}
-            <header class="app-header">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <ul class="navbar-nav">
-                        <li class="nav-item d-block d-xl-none">
-                            <a class="nav-link sidebartoggler" href="javascript:void(0)">
-                                <i class="ti ti-menu-2"></i>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-                        <ul class="navbar-nav flex-row ms-auto align-items-center">
-                            <li class="nav-item">
-                                <a class="nav-link" href="javascript:void(0)">
-                                    <i class="ti ti-bell"></i>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <img src="https://ui-avatars.com/api/?name=Produsen" class="rounded-circle" width="35"
-                                    alt="user">
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-
             {{-- PAGE CONTENT --}}
             <div class="container-fluid py-4">
                 @yield('content')
             </div>
 
         </div>
+
+        <style>
+            /* Samakan lebar konten dengan dashboard admin */
+            .container-fluid {
+                max-width: 1200px;
+                margin-left: 0;
+                margin-right: auto;
+            }
+        </style>
+
 
 
         {{-- JS ADMIN --}}

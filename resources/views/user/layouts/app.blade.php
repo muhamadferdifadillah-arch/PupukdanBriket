@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>@yield('title', 'Manfaatin Online')</title>
-    
+    <title>@yield('title', 'ManfaatinOnline')</title>
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('user/images/logom.png') }}">
-    <link rel="shortcut icon" href="{{ asset('user/images/logom.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('user/images/logom.png') }}">
     
-    <!-- Include Head (CSS, Fonts, etc) -->
-    @include('user.layouts.head')
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('user/css/style.css') }}">
     
     @stack('styles')
 </head>
+
 <body>
     @include('user.partials.svg-icons')
     
@@ -39,7 +42,11 @@
     </main>
 
     @include('user.partials.footer')
-    @include('user.layouts.scripts')
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
     @stack('scripts')
     
     <script>
@@ -52,4 +59,5 @@
         });
     </script>
 </body>
+
 </html>

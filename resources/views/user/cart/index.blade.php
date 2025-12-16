@@ -1,5 +1,7 @@
 @extends('user.layouts.app')
 
+@section('title', 'Shopping Cart')
+
 @section('content')
 <div class="container py-5">
 
