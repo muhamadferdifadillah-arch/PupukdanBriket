@@ -592,7 +592,7 @@
 
                     <div class="team-info">
                         <h3 class="team-name">Tiara Nur Hidayah</h3>
-                        <p class="team-position">UI/UX Designer</p>
+                        <p class="team-position">Frontend Developer & UI/UX Designer</p>
                         <p class="team-description">Ahli membuat tampilan visual aplikasi.</p>
 
                         <div class="team-social">
@@ -626,7 +626,7 @@
 
                     <div class="team-info">
                         <h3 class="team-name">Muhamad Ferdi Fadillah</h3>
-                        <p class="team-position">Lead Developer & UI/UX Designer</p>
+                        <p class="team-position">Lead Developer & Database Designer</p>
                         <p class="team-description">Ahli dalam membangun website & Membuat tampilan visual aplikasi.</p>
 
                         <div class="team-social">
@@ -660,7 +660,7 @@
 
                     <div class="team-info">
                         <h3 class="team-name">Ghaitsa Zahira Sofhia</h3>
-                        <p class="team-position">Content Curator</p>
+                        <p class="team-position">Content Curator & UI/UX Designer</p>
                         <p class="team-description">Ahli dalam mengkurasi, meneliti, dan menyusun.</p>
 
                         <div class="team-social">

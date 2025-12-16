@@ -55,14 +55,17 @@ class CheckoutController extends Controller
         $shipping = (int) ($request->shipping_cost ?? 0);
         $total = $subtotal + $tax + $shipping;
 
+        // Generate unique order number
+        $orderNumber = 'ORD-' . strtoupper(uniqid());
+
         try {
             // INSERT ORDER
             $orderId = DB::table('orders')->insertGetId([
                 'user_id' => $userId,
-                'order_number' => 'ORD-' . time(),
-                'customer_name' => $request->full_name ?? 'Customer',
+                'order_number' => $orderNumber,
+                'customer_name' => $request->full_name ?? Auth::user()->name ?? 'Customer',
                 'customer_phone' => $request->phone ?? '000',
-                'shipping_address' => $request->address ?? 'Address',
+                'shipping_address' => $request->courier === 'pickup' ? 'Jemput di Tempat' : ($request->address ?? 'Address'),
                 'subtotal' => $subtotal,
                 'tax' => $tax,
                 'shipping_cost' => $shipping,
@@ -92,7 +95,10 @@ class CheckoutController extends Controller
             // CLEAR CART
             DB::table('cart')->where('user_id', $userId)->delete();
 
-            return redirect('/')->with('success', 'Pesanan berhasil dibuat! Terima kasih telah berbelanja.');
+            // ✅ REDIRECT KE BERANDA DENGAN PESAN SUCCESS
+            return redirect()->route('home')
+                ->with('success', 'Pesanan berhasil dibuat! Nomor Order: ' . $orderNumber)
+                ->with('order_number', $orderNumber);
 
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal: ' . $e->getMessage());

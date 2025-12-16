@@ -76,6 +76,24 @@ class OrderController extends Controller
     }
 
     /**
+     * ✅ HALAMAN SUCCESS SETELAH CHECKOUT - TAMBAHKAN METHOD INI
+     */
+    public function orderSuccess($orderNumber)
+    {
+        $order = DB::table('orders')
+            ->where('order_number', $orderNumber)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if (!$order) {
+            return redirect()->route('home')
+                ->with('error', 'Pesanan tidak ditemukan!');
+        }
+
+        return view('user.order-success', compact('order', 'orderNumber'));
+    }
+
+    /**
      * Selesaikan pesanan (status: shipped → completed)
      */
     public function complete($id)

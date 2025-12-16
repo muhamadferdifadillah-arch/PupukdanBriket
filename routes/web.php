@@ -18,10 +18,12 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\user\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\user\CategoryController as UserCategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\user\CheckoutController;
 use App\Http\Controllers\user\OrderController;
+use App\Http\Controllers\Produsen\DashboardController as ProdusenDashboardController;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Produsen\ProdukProdusenController;
 
@@ -100,6 +102,8 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::get('/orders/{id}/pay', [OrderController::class, 'pay'])->name('orders.pay');
     Route::post('/orders/{id}/complete', [OrderController::class, 'complete'])->name('orders.complete');
     Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::get('/order/success/{orderNumber}', [OrderController::class, 'orderSuccess'])
+        ->name('order.success');
 });
 
 // Route tanpa prefix untuk akses langsung /orders
@@ -180,20 +184,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         return redirect()->route('admin.profile')->with('success', 'Profil berhasil diperbarui.');
     })->name('profile.update');
 
-    // Dashboard
-    Route::get('/dashboard', function () {
-        $totalProducts = \App\Models\Product::count();
-        $totalOrders = \App\Models\Order::count();
-        $totalRevenue = \App\Models\Order::where('status', 'completed')->sum('total_amount');
-        $pendingOrders = \App\Models\Order::where('status', 'pending')->count();
-
-        return view('admin.dashboard', compact(
-            'totalProducts',
-            'totalOrders',
-            'totalRevenue',
-            'pendingOrders'
-        ));
-    })->name('dashboard');
+// Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Ecommerce page
     Route::get('/ecommerce', function () {
@@ -228,9 +220,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 // ============================================
 
 Route::prefix('produsen')->name('produsen.')->middleware(['auth', 'role:produsen'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('produsen.dashboard');
-    })->name('dashboard');
+    // Dashboard - GUNAKAN CONTROLLER
+    Route::get('/dashboard', [ProdusenDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/produk', [ProdukProdusenController::class, 'index'])->name('produk');
     
@@ -299,3 +290,7 @@ Route::get('/file/uploads/{path}', function ($path) {
     
     return response()->file(Storage::disk('public')->path($path));
 })->where('path', '.*');
+
+
+
+

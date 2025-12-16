@@ -33,7 +33,7 @@
                 <div class="col-lg-7">
 
                     <!-- Shipping Address -->
-                    <div class="card shadow-sm border-0 mb-4 checkout-card">
+                    <div class="card shadow-sm border-0 mb-4 checkout-card" id="shippingAddressCard">
                         <div class="card-body p-4">
                             <h5 class="fw-bold text-dark mb-3">
                                 <i class="fas fa-map-marker-alt text-success me-2"></i>Alamat Pengiriman
@@ -75,7 +75,6 @@
                                     <input type="hidden" name="city_id" value="bengkalis">
                                 </div>
 
-
                                 <div class="col-md-6">
                                     <label class="form-label">Kecamatan</label>
                                     <input type="text" name="district" class="form-control rounded-3">
@@ -95,6 +94,30 @@
                             <h5 class="fw-bold text-dark mb-3">
                                 <i class="fas fa-truck text-success me-2"></i>Metode Pengiriman
                             </h5>
+
+                            <!-- Opsi Jemput di Tempat -->
+                            <label class="shipping-option border rounded p-3 mb-3 d-flex justify-content-between align-items-center cursor-pointer">
+                                <div class="d-flex align-items-center gap-3">
+                                   <input type="radio"
+                                        name="courier"
+                                        value="pickup"
+                                        data-cost="0"
+                                        required>
+                                    <div>
+                                        <strong class="text-primary">
+                                            <i class="fas fa-store me-2"></i>Jemput di Tempat
+                                        </strong>
+                                        <small class="d-block text-muted">Ambil sendiri di lokasi produsen</small>
+                                        <small class="d-block text-info">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Alamat akan dikirim setelah order dikonfirmasi
+                                        </small>
+                                    </div>
+                                </div>
+                                <span class="fw-semibold text-primary">GRATIS</span>
+                            </label>
+
+                            <div class="text-center text-muted small mb-3">atau</div>
 
                             @foreach([
                                 'jne' => ['JNE Regular', 'Estimasi 2–3 Hari', 15000],
@@ -133,7 +156,6 @@
                                 'e-wallet' => ['E-Wallet', 'Gopay, OVO, Dana, ShopeePay', 'fa-wallet'],
                                 'cash' => ['COD (Bayar Ditempat)', 'Pembayaran saat barang tiba', 'fa-money-bill-wave'],
                             ] as $key => $val)
-
 
                             <label class="payment-option border rounded p-3 mb-3 d-flex align-items-center gap-3 cursor-pointer">
                                 <input type="radio" name="payment_method" value="{{ $key }}" required>
@@ -213,8 +235,8 @@
                     </div>
                 </div>
 
-            </div> {{-- ✅ PERBAIKAN: Tutup row g-4 --}}
-        </form> {{-- ✅ PERBAIKAN: Tutup form --}}
+            </div>
+        </form>
 
     </div>
 </div>
@@ -228,6 +250,10 @@
 .payment-option:hover {
     border-color: #198754 !important;
     background: #f0fff4;
+}
+.shipping-option:has(input[value="pickup"]:checked) {
+    border-color: #0d6efd !important;
+    background: #e7f1ff;
 }
 .cursor-pointer { cursor: pointer; }
 </style>
@@ -243,19 +269,40 @@ document.querySelectorAll('input[name="courier"]').forEach(radio => {
         const shipping = parseInt(this.dataset.cost);
         const total = subtotal + tax + shipping;
 
-        document.getElementById('shippingCost').innerText =
-            'Rp ' + shipping.toLocaleString('id-ID');
+        // Update tampilan
+        if (this.value === 'pickup') {
+            document.getElementById('shippingCost').innerHTML = '<span class="text-primary fw-bold">GRATIS</span>';
+        } else {
+            document.getElementById('shippingCost').innerText = 'Rp ' + shipping.toLocaleString('id-ID');
+        }
 
-        document.getElementById('totalAmount').innerText =
-            'Rp ' + total.toLocaleString('id-ID');
-
+        document.getElementById('totalAmount').innerText = 'Rp ' + total.toLocaleString('id-ID');
         document.getElementById('shippingInput').value = shipping;
+
+        // Toggle visibility form alamat
+        const addressCard = document.getElementById('shippingAddressCard');
+        const addressInputs = addressCard.querySelectorAll('input, textarea');
+        
+        if (this.value === 'pickup') {
+            addressCard.style.opacity = '0.6';
+            addressCard.style.pointerEvents = 'none';
+            addressInputs.forEach(input => {
+                input.removeAttribute('required');
+            });
+        } else {
+            addressCard.style.opacity = '1';
+            addressCard.style.pointerEvents = 'auto';
+            addressInputs.forEach(input => {
+                if (!input.readOnly && input.name !== 'district') {
+                    input.setAttribute('required', 'required');
+                }
+            });
+        }
     });
 });
 
 // Validasi form sebelum submit
 document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-    // Validasi courier
     const courierSelected = document.querySelector('input[name="courier"]:checked');
     if (!courierSelected) {
         e.preventDefault();
@@ -263,7 +310,6 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
         return false;
     }
 
-    // Validasi payment
     const paymentSelected = document.querySelector('input[name="payment_method"]:checked');
     if (!paymentSelected) {
         e.preventDefault();
@@ -271,19 +317,10 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
         return false;
     }
 
-    // Validasi shipping cost
-    const shippingCost = parseInt(document.getElementById('shippingInput').value);
-    if (!shippingCost || shippingCost === 0) {
-        e.preventDefault();
-        alert('Silakan pilih metode pengiriman terlebih dahulu!');
-        return false;
-    }
-
-    // Log untuk debugging
     console.log('Form validated successfully!');
     console.log('Courier:', courierSelected.value);
     console.log('Payment:', paymentSelected.value);
-    console.log('Shipping Cost:', shippingCost);
+    console.log('Shipping Cost:', document.getElementById('shippingInput').value);
 });
 
 // Auto-select first courier (opsional)

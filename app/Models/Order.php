@@ -23,6 +23,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+     public function orderDetails()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
+    }
+
     /**
      * Relasi ke OrderItems
      */

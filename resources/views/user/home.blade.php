@@ -417,6 +417,32 @@
     </div>
   </header>
 
+  <!-- ✅ TAMBAHKAN ALERT SUCCESS DI SINI (Setelah </header>) -->
+  @if(session('success'))
+    <div class="container-lg mt-4">
+      <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <div class="d-flex align-items-center">
+          <svg width="24" height="24" fill="currentColor" class="me-3" viewBox="0 0 24 24">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+          </svg>
+          <div class="flex-grow-1">
+            <strong>✅ Berhasil!</strong> {{ session('success') }}
+            @if(session('order_number'))
+              <a href="{{ route('user.orders.show', session('order_number')) }}" class="btn btn-sm btn-success ms-2">
+                <svg width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z" />
+                </svg>
+                Lihat Detail Pesanan
+              </a>
+            @endif
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  @endif
+
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="container-lg">

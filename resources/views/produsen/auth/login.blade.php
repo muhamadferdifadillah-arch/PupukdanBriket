@@ -3,38 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login Produsen - Manfaatin</title>
-    <link rel="stylesheet" href="{{ asset('admin/assets/css/styles.min.css') }}">
+    
+    <!-- Tambahkan Favicon di sini -->
+    <link rel="icon" type="image/png" href="{{ asset('User/images/logom.png') }}">
+    <!-- Atau bisa juga menggunakan .ico file -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background: #f8f9fa;
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .login-wrapper {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .login-card {
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            width: 100%;
-            max-width: 440px;
-            border: 1px solid #e8e8e8;
-            animation: slideUp 0.5s ease-out;
-        }
-
-        @keyframes slideUp {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -42,223 +25,128 @@
             }
         }
 
-        .login-header {
-            background: white;
-            padding: 50px 30px 40px;
-            text-align: center;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .logo-container {
-            background: white;
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            margin: 0 auto 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #e8e8e8;
-        }
-
-        .logo-icon {
-            font-size: 45px;
-        }
-
-        .login-header p {
-            font-size: 14px;
-            color: #718096;
-            margin: 0;
-            font-weight: 500;
-        }
-
-        .login-body {
-            padding: 40px 35px;
-            background: white;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 10px;
-            font-size: 14px;
-            display: block;
-        }
-
-        .form-control {
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 14px 18px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            background: white;
-            color: #2d3748;
-            width: 100%;
-        }
-
-        .form-control:focus {
-            border-color: #cbd5e0;
-            box-shadow: 0 0 0 4px rgba(203, 213, 224, 0.2);
-            outline: none;
-            background: white;
-        }
-
-        .form-control::placeholder {
-            color: #a0aec0;
-        }
-
-        .btn-login {
-            background: #2d3748;
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            width: 100%;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 16px rgba(45, 55, 72, 0.2);
-            cursor: pointer;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45, 55, 72, 0.3);
-            background: #1a202c;
-        }
-
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-        .alert {
-            border-radius: 12px;
-            border: none;
-            padding: 14px 18px;
-            margin-bottom: 24px;
-            animation: slideDown 0.3s ease-out;
-            font-size: 14px;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .alert-danger {
-            background: #fee2e2;
-            color: #991b1b;
-            border-left: 4px solid #dc2626;
-        }
-
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border-left: 4px solid #10b981;
-        }
-
-        .footer-text {
-            text-align: center;
-            margin-top: 28px;
-            padding-top: 24px;
-            border-top: 1px solid #f0f0f0;
-            color: #718096;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .footer-text strong {
-            color: #2d3748;
-            display: block;
-            margin-top: 4px;
-        }
-
-        .mb-4 {
-            margin-bottom: 24px;
-        }
-
-        .text-danger {
-            color: #dc2626;
-            font-size: 13px;
-            margin-top: 6px;
-            display: block;
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
         }
     </style>
 </head>
-<body>
-
-<div class="login-wrapper">
-    <div class="login-card">
-        <!-- Header dengan Logo -->
-        <div class="login-header">
-            <div class="logo-container">
-               <img src="{{ asset('User/images/logom.png') }}" alt="Logo" style="width: 50px; height: 50px;">
+<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+    
+    <div class="w-full max-w-md animate-fade-in">
+        <!-- Card Container -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-10">
+            <!-- Logo & Title Section -->
+            <div class="mb-10">
+                <!-- Logo -->
+                <div class="mb-8">
+                    <img src="{{ asset('User/images/logom.png') }}" alt="Logo Manfaatin" class="h-12 w-auto">
+                </div>
+                
+                <!-- Heading -->
+                <h1 class="text-4xl font-bold text-gray-900 mb-3">Log in.</h1>
+                <p class="text-gray-600 text-base">Portal Produsen Organik</p>
             </div>
-            <p style="margin-top: 16px; font-weight: 600; font-size: 15px; color: #4a5568;">Portal Produsen Organik</p>
-        </div>
 
-        <!-- Body Form -->
-        <div class="login-body">
-            @if(session('error'))
-                <div class="alert alert-danger">
-                    <strong>⚠️ Error!</strong> {{ session('error') }}
-                </div>
-            @endif
-
+            <!-- Alert Messages -->
             @if(session('success'))
-                <div class="alert alert-success">
-                    <strong>✓ Berhasil!</strong> {{ session('success') }}
-                </div>
+            <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
+                <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
+            </div>
             @endif
 
-            <form method="POST" action="{{ route('produsen.login.post') }}">
+            @if(session('error'))
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                <i class="fas fa-exclamation-circle mr-2"></i>{{ session('error') }}
+            </div>
+            @endif
+
+            <!-- Form Login PRODUSEN -->
+            <form action="{{ route('produsen.login.post') }}" method="POST">
                 @csrf
 
-                <div class="mb-4">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" 
-                           name="email" 
-                           class="form-control" 
-                           placeholder="produsen@manfaatin.com"
-                           value="{{ old('email') }}"
-                           required 
-                           autofocus>
+                <!-- Email -->
+                <div class="mb-5">
+                    <div class="relative">
+                        <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            value="{{ old('email') }}"
+                            placeholder="produsen@manfaatin.com"
+                            class="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-gray-50 focus:bg-white @error('email') border-red-500 @enderror"
+                            required
+                        >
+                    </div>
                     @error('email')
-                        <small class="text-danger">{{ $message }}</small>
+                    <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="mb-4">
-                    <label class="form-label">Password</label>
-                    <input type="password" 
-                           name="password" 
-                           class="form-control" 
-                           placeholder="Masukkan password Anda"
-                           required>
+                <!-- Password -->
+                <div class="mb-6">
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            id="password"
+                            placeholder="••••••••"
+                            class="w-full pl-12 pr-12 py-3.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-gray-50 focus:bg-white @error('password') border-red-500 @enderror"
+                            required
+                        >
+                        <button 
+                            type="button" 
+                            onclick="togglePassword()"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                            <i class="fas fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
                     @error('password')
-                        <small class="text-danger">{{ $message }}</small>
+                    <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <button type="submit" class="btn btn-login">
-                    🔐 Login Sekarang
+                <!-- Submit Button -->
+                <button 
+                    type="submit"
+                    class="w-full bg-blue-600 text-white py-3.5 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg shadow-blue-500/30"
+                >
+                    Log in
                 </button>
 
-                <div class="footer-text">
-                    Sistem Manajemen Produsen
-                    <strong>Manfaatin - Organic Fertilizer</strong>
+                <!-- Footer Text (Replacing Register Link) -->
+                <div class="text-center mt-8 pt-6 border-t border-gray-200">
+                    <p class="text-gray-600 text-sm">
+                        Sistem Manajemen Produsen
+                    </p>
+                    <p class="text-gray-800 font-semibold text-sm mt-1">
+                        Manfaatin - Organic Fertilizer
+                    </p>
                 </div>
             </form>
         </div>
+        <!-- End Card Container -->
     </div>
-</div>
 
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Auto focus pada input pertama
+        document.querySelector('input[name="email"]').focus();
+    </script>
 </body>
 </html>
