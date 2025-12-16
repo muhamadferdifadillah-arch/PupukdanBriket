@@ -540,7 +540,7 @@
 
               <!-- Produk Image - TANPA LINK -->
               <figure style="cursor: default;">
-                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded"
+                <img src="{{ asset('user/images/products/' . basename($product->image)) }}" alt="{{ $product->name }}" class="img-fluid rounded"
                   style="height:180px; object-fit:cover; pointer-events: none;">
               </figure>
 
