@@ -40,7 +40,7 @@
                 <!-- Logo -->
                 <div class="mb-8">
                     <!-- Logo Anda -->
-                    <img src="{{ asset('User/images/logom.png') }}" alt="Logo Manfaatin" class="h-16 w-auto">
+                    <img src="{{ asset('user/images/logom.png') }}" alt="Logo Manfaatin" class="h-16 w-auto">
                 </div>
                 
                 <!-- Heading -->
