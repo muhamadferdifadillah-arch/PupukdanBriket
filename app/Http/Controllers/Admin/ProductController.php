@@ -15,12 +15,12 @@ class ProductController extends Controller
      * Display a listing of products
      */
     public function index()
-{
-    $products = Product::with('category')->latest()->paginate(10);
-    $categories = Category::all(); // TAMBAHKAN BARIS INI
-    
-    return view('admin.products.index', compact('products', 'categories'));
-}
+    {
+        $products = Product::with('category')->latest()->paginate(10);
+        $categories = Category::all();
+        
+        return view('admin.products.index', compact('products', 'categories'));
+    }
 
     /**
      * Show the form for creating a new product
@@ -52,8 +52,18 @@ class ProductController extends Controller
             'meta_description' => 'nullable|string',
         ]);
 
-        // Generate slug dari name
-        $validated['slug'] = Str::slug($request->name);
+        // Generate slug unik dari name
+        $slug = Str::slug($request->name);
+        $originalSlug = $slug;
+        $count = 1;
+        
+        // Cek apakah slug sudah ada, jika ya tambahkan angka di belakang
+        while (Product::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+        
+        $validated['slug'] = $slug;
         
         // Generate SKU otomatis jika tidak diisi
         if (empty($validated['sku'])) {
@@ -117,7 +127,20 @@ class ProductController extends Controller
         ]);
 
         // Update slug jika name berubah
-        $validated['slug'] = Str::slug($request->name);
+        $slug = Str::slug($request->name);
+        
+        // Cek apakah slug sudah ada (kecuali milik produk ini sendiri)
+        if ($slug !== $product->slug) {
+            $originalSlug = $slug;
+            $count = 1;
+            
+            while (Product::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
+                $slug = $originalSlug . '-' . $count;
+                $count++;
+            }
+        }
+        
+        $validated['slug'] = $slug;
 
         // Handle upload image baru
         if ($request->hasFile('image')) {
